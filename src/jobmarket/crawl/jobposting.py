@@ -132,6 +132,7 @@ def crawl(
     limit: int,
     raw_dir: Path,
     db_path: Path,
+    keep: Callable[[dict], bool] = lambda job: True,
 ) -> Counter:
     """Kiểm robots → lấy danh sách URL → tải (bỏ qua nếu đã có HTML gốc) → parse → lọc PII → lưu DB."""
     raw_dir.mkdir(parents=True, exist_ok=True)
@@ -161,6 +162,9 @@ def crawl(
         job = parse(page.read_text(encoding="utf-8"))
         if job is None:
             stats["parse_failed"] += 1
+            continue
+        if not keep(job):  # HTML gốc vẫn giữ: đổi bộ lọc thì chạy lại không cần tải lại
+            stats["filtered_out"] += 1
             continue
         if job["description"]:
             job["description"] = redact(job["description"])
