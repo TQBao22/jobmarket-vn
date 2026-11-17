@@ -33,7 +33,7 @@ flowchart LR
 | Module | Việc làm | Phụ thuộc ngoài |
 |---|---|---|
 | `crawl/jobposting.py` | phần chung mọi nguồn có JSON-LD `JobPosting`: fetch (robots, delay, retry), sitemap, parse, vòng crawl lưu HTML gốc | stdlib |
-| `crawl/itviec.py` | cấu hình ITviec: URL robots/sitemap, lọc AI/Data theo slug, tên file HTML gốc | stdlib |
+| `crawl/itviec.py` | cấu hình ITviec: URL robots/sitemap, lọc AI/Data theo nội dung (`is_ai_data`), tên file HTML gốc | stdlib |
 | `extract/pii.py` | che email, SĐT | stdlib |
 | `extract/llm.py` | gom lô, gọi `claude -p`, kiểm schema, ghi cache/log | Claude Code CLI, `pydantic` |
 | `normalize/` | ánh xạ kỹ năng thô → tên chuẩn bằng `aliases.csv` | stdlib |

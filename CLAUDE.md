@@ -3,7 +3,7 @@
 Crawl JD (tin tuyển dụng) AI/Data ở Việt Nam → LLM trích kỹ năng ra JSON → chuẩn hoá tên kỹ năng → dashboard xu hướng.
 Project portfolio cá nhân: giá trị nằm ở **chất lượng đo được** và **lý do của mỗi quyết định kiến trúc**, không ở số tính năng.
 
-**Đang ở:** v1, đủ code cho 6 bước + eval (52 test xanh); đã trích 124/124 JD; gold 40/40 JD: 2 người duyệt, 38 Opus gán + Sonnet duyệt; eval: LLM F1 0,852 vs thẻ ITviec 0,238 (`eval/RESULTS.md`); dashboard công khai tại https://jobmarket-vn-tndk7vgqeiu5zqkfkxpwrw.streamlit.app/ (Streamlit Cloud, từ `main`). Chờ người dùng chốt: tiêu chí v1 "gold gán tay" chưa đạt đúng nghĩa (nhãn vẫn là AI) → giữ tiêu chí hay sửa rồi đóng v1. Cập nhật dòng này khi chuyển giai đoạn.
+**Đang ở:** v1 xong (2026-11-17): 128 JD AI/Data = toàn bộ JD đang mở trên ITviec (lọc theo tiêu đề trên cả 603 JD của sitemap), đã trích hết; gold 40 JD (2 người duyệt, 38 Opus gán + Sonnet duyệt); eval: LLM F1 0,852 vs thẻ ITviec 0,238 (`eval/RESULTS.md`); dashboard công khai tại https://jobmarket-vn-tndk7vgqeiu5zqkfkxpwrw.streamlit.app/ (Streamlit Cloud, từ `main`). Tiếp theo: v2, bước đầu là đọc điều khoản Anthropic về dùng output Claude để fine-tune, ghi ADR. Cập nhật dòng này khi chuyển giai đoạn.
 
 Kiến trúc, bảng DB, quyết định thiết kế: `docs/architecture.md`. Các bước, đầu vào/đầu ra, trạng thái từng bước: `docs/pipeline.md`. Thuật ngữ: `GLOSSARY.md`.
 
@@ -13,7 +13,7 @@ Làm tuần tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước 
 
 | Giai đoạn | Nội dung | Xong khi |
 |---|---|---|
-| **v1 — Pipeline + eval** | Crawl ITviec, lọc PII, LLM trích kỹ năng, chuẩn hoá tên kỹ năng, dashboard | Toàn bộ JD AI/Data đang mở trên ITviec trong DB (ADR 0002) · gold set 40 JD gán tay · F1 ghi trong `eval/RESULTS.md` · dashboard có URL công khai |
+| **v1 — Pipeline + eval** | Crawl ITviec, lọc PII, LLM trích kỹ năng, chuẩn hoá tên kỹ năng, dashboard | Toàn bộ JD AI/Data đang mở trên ITviec trong DB (ADR 0002) · gold set 40 JD (AI gán + AI duyệt, 2 người duyệt; hạn chế ghi trong `docs/pipeline.md`) · F1 ghi trong `eval/RESULTS.md` · dashboard có URL công khai |
 | **v2 — Model nhỏ + routing + cache** | Fine-tune Qwen ~1.5B (LoRA) từ output model lớn; router: JD dễ → model local, khó/không chắc → Claude Haiku; cache JD trùng | So sánh 3 cấu hình (chỉ Claude / chỉ local / routing) theo F1, chi phí quy đổi trên 1.000 JD, độ trễ — ghi trong `eval/RESULTS.md` |
 | **v3 — MCP server tự viết** | JSON-RPC thuần, không dùng SDK, cho agent truy vấn DB JD chỉ đọc | Claude Code kết nối được · ≥3 tool · mỗi tool có test · trả lời đúng 5 câu hỏi mẫu trong `docs/mcp-demo.md` |
 | **v4 — Bài viết** | 1–2 bài phân tích: kiến trúc, eval, chi phí trên mỗi JD | Mọi con số trích từ `eval/RESULTS.md` |

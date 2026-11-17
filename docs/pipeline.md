@@ -20,7 +20,7 @@ Thuật ngữ: `GLOSSARY.md`. Thành phần và lưu trữ: `docs/architecture.m
 | E | Eval | `data/gold/labels.jsonl` + lần trích trên gold set | 1 dòng trong `eval/RESULTS.md` | `gold.py`, `evaluate.py`, skill `run-eval` | xong: 40/40 JD gold (nhãn do claude-opus-5-5 gán, chưa người duyệt); LLM F1 0,851 vs baseline 0,238 |
 
 ## 1. Crawl
-- Lấy URL từ sitemap, lọc AI/Data theo slug, tải mỗi trang cách nhau ≥2 giây, lưu HTML gốc rồi mới parse.
+- Lấy mọi URL trong sitemap, tải mỗi trang cách nhau ≥2 giây, lưu HTML gốc rồi mới parse. Chỉ lưu DB JD AI/Data: tiêu đề có từ khoá vai trò, hoặc mô tả có ≥3 thuật ngữ ML/Data khác nhau (`itviec.is_ai_data`). Lọc theo slug cũ bỏ sót JD có slug không chứa từ khoá.
 - Parse khối JSON-LD `JobPosting` → `title, company, date_posted, valid_through, tags, description`.
 - Chạy: `$env:PYTHONPATH="src"; .venv\Scripts\python -m jobmarket.crawl.itviec --limit 200`
 - Chạy lại sẽ dùng lại HTML đã có (không tải lại), chỉ parse và ghi DB lại.
