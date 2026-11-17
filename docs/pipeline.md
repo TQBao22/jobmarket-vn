@@ -16,7 +16,7 @@ Thuật ngữ: `GLOSSARY.md`. Thành phần và lưu trữ: `docs/architecture.m
 | 3 | Trích kỹ năng | bảng `jobs` | bảng `llm_calls`, `extractions` | `extract/llm.py` + `prompts/v1.txt` | xong: 124/124 JD (123 nội dung khác nhau), 7 lần gọi, 0 lỗi |
 | 4 | Chuẩn hoá | `extractions.skills` | tên chuẩn (tính lúc đọc) | `normalize/` + `normalize/aliases.csv` | xong (bảng alias bản đầu, tên chuẩn chọn tay) |
 | 5 | Tổng hợp | `jobs` + kỹ năng đã chuẩn hoá | `data/public/skill_counts.csv` | `aggregate.py` | xong (124 JD, 727 kỹ năng khác nhau) |
-| 6 | Dashboard | `data/public/skill_counts.csv` | trang Streamlit có URL công khai | `app.py` | chạy local được; chưa deploy |
+| 6 | Dashboard | `data/public/skill_counts.csv` | trang Streamlit có URL công khai | `app.py` | đã deploy: https://jobmarket-vn-tndk7vgqeiu5zqkfkxpwrw.streamlit.app/ |
 | E | Eval | `data/gold/labels.jsonl` + lần trích trên gold set | 1 dòng trong `eval/RESULTS.md` | `gold.py`, `evaluate.py`, skill `run-eval` | xong: 40/40 JD gold (nhãn do claude-opus-5-5 gán, chưa người duyệt); LLM F1 0,851 vs baseline 0,238 |
 
 ## 1. Crawl
@@ -54,7 +54,7 @@ Chạy: `python -m jobmarket.aggregate`
 
 ## 6. Dashboard
 - `streamlit run app.py` (test: `tests/test_app.py` dùng `AppTest`), chỉ đọc `data/public/skill_counts.csv`. Dùng skill `dataviz` khi vẽ biểu đồ.
-- Deploy dự kiến: Streamlit Community Cloud (miễn phí, cần repo GitHub công khai, repo không chứa `data/raw/` và `jobs.db`).
+- Deploy: Streamlit Community Cloud, nhánh `main`, Python 3.12 → https://jobmarket-vn-tndk7vgqeiu5zqkfkxpwrw.streamlit.app/ (công khai). Repo `TQBao22/jobmarket-vn` không chứa `data/raw/`, `jobs.db`, `tests/fixtures/itviec/`. Push lên `main` → app tự cập nhật.
 
 ## E. Eval
 - Gold set: 40 JD chọn cố định theo sha256(url) (`python -m jobmarket.gold init`), lưu `data/gold/labels.jsonl` (`{"url", "title", "skills"}`; `skills: null` = chưa gán). Không chép nội dung JD. Gán nhãn: `python -m jobmarket.gold show <n>` để đọc JD, sửa `skills` trong file.
