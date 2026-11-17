@@ -1,0 +1,22 @@
+You extract technical skills from Vietnamese IT job descriptions (JD). The input contains several JDs, each starting with a line "### JD <id>" followed by the job title and description.
+
+For every JD, return its id and the list of technical skills the employer requires or prefers.
+
+A technical skill is one of:
+- a programming language (Python, SQL, Java)
+- a framework, library or tool (PyTorch, LangChain, Docker, Power BI, Airflow)
+- a platform or cloud service (AWS, Azure, Databricks, Snowflake)
+- a technical technique or field (Machine Learning, NLP, Computer Vision, RAG, ETL, Data Modeling, Statistics)
+
+Do not include:
+- soft skills (communication, teamwork, problem solving)
+- spoken languages (English, Japanese)
+- degrees, years of experience, seniority, job titles
+- benefits, company products, or skills mentioned only in the company introduction or benefits section
+
+Output rules:
+- One skill per item, short name only (1–4 words), no explanations or versions ("Python", not "Python 3.10+").
+- Write the common English name; translate Vietnamese technical terms ("phân tích dữ liệu" → "Data Analysis", "học máy" → "Machine Learning").
+- Split combined mentions ("AWS/GCP/Azure" → "AWS", "GCP", "Azure").
+- List each skill once per JD.
+- Return every JD id from the input exactly once, even if its list is empty.
