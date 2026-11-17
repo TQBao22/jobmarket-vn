@@ -31,3 +31,8 @@ Toàn bộ 123 JD (7 lần gọi): $0,098 quy đổi (~$0,80/1.000 JD), trung v�
 - Chỉ hợp lệ cho chạy trên máy cá nhân. Nếu làm app cho người khác gọi LLM lúc chạy → phải đổi sang API key.
 - Chưa đo: hạn mức 5 giờ chịu được bao nhiêu lô 20 JD. Đo ở lần chạy hàng loạt đầu tiên và cập nhật ADR này.
 - Chưa kiểm tra: điều khoản dùng output Claude làm dữ liệu fine-tune (v2).
+
+## Rủi ro điều khoản (kiểm 2026-11-17, `docs/research/anthropic-dieu-khoan-finetune.md`)
+- Consumer Terms cấm truy cập bằng script "except ... where we otherwise explicitly permit it". Tài liệu Claude Code hướng dẫn `-p` trong script và `claude setup-token` cho "CI pipelines and scripts", nhưng không câu nào nói thẳng gói Pro/Max được chạy hàng loạt. Giữ quy mô nhỏ (vài lần gọi/tuần), không chạy liên tục.
+- Usage Policy cấm dùng output Claude để train model → v2 không train trên output này (ADR 0003).
+- Kỹ thuật: tài liệu ghi `--bare` (không dùng gói) "will become the default for `-p`". Khi đó lệnh hiện tại có thể ngừng chạy bằng gói.

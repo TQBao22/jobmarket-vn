@@ -3,18 +3,18 @@
 Crawl JD (tin tuyển dụng) AI/Data ở Việt Nam → LLM trích kỹ năng ra JSON → chuẩn hoá tên kỹ năng → dashboard xu hướng.
 Project portfolio cá nhân: giá trị nằm ở **chất lượng đo được** và **lý do của mỗi quyết định kiến trúc**, không ở số tính năng.
 
-**Đang ở:** v1 xong (2026-11-17): 128 JD AI/Data = toàn bộ JD đang mở trên ITviec (lọc theo tiêu đề trên cả 603 JD của sitemap), đã trích hết; gold 40 JD (2 người duyệt, 38 Opus gán + Sonnet duyệt); eval: LLM F1 0,852 vs thẻ ITviec 0,238 (`eval/RESULTS.md`); dashboard công khai tại https://jobmarket-vn-tndk7vgqeiu5zqkfkxpwrw.streamlit.app/ (Streamlit Cloud, từ `main`). Tiếp theo: v2, bước đầu là đọc điều khoản Anthropic về dùng output Claude để fine-tune, ghi ADR. Cập nhật dòng này khi chuyển giai đoạn.
+**Đang ở:** v2 bắt đầu (2026-11-17). v1 xong: 128 JD AI/Data trên ITviec, gold 40 JD (2 người duyệt), LLM F1 0,852 vs thẻ ITviec 0,238, dashboard https://jobmarket-vn-tndk7vgqeiu5zqkfkxpwrw.streamlit.app/. Crawl ITviec tự động mỗi Chủ nhật 20:00 (`scripts/crawl_weekly.ps1`). v2 theo ADR 0003: không train trên output Claude; tiếp theo là đo Qwen3-1.7B/8B few-shot trên gold làm mốc. Cập nhật dòng này khi chuyển giai đoạn.
 
 Kiến trúc, bảng DB, quyết định thiết kế: `docs/architecture.md`. Các bước, đầu vào/đầu ra, trạng thái từng bước: `docs/pipeline.md`. Thuật ngữ: `GLOSSARY.md`.
 
 ## Lộ trình và tiêu chí xong
 
-Làm tuần tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt tiêu chí. Đề xuất ngoài lộ trình (upload CV, crawl định kỳ, multi-agent...) thì hỏi người dùng trước.
+Làm tuần tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt tiêu chí. Đề xuất ngoài lộ trình (upload CV, multi-agent...) thì hỏi người dùng trước.
 
 | Giai đoạn | Nội dung | Xong khi |
 |---|---|---|
 | **v1 — Pipeline + eval** | Crawl ITviec, lọc PII, LLM trích kỹ năng, chuẩn hoá tên kỹ năng, dashboard | Toàn bộ JD AI/Data đang mở trên ITviec trong DB (ADR 0002) · gold set 40 JD (AI gán + AI duyệt, 2 người duyệt; hạn chế ghi trong `docs/pipeline.md`) · F1 ghi trong `eval/RESULTS.md` · dashboard có URL công khai |
-| **v2 — Model nhỏ + routing + cache** | Fine-tune Qwen ~1.5B (LoRA) từ output model lớn; router: JD dễ → model local, khó/không chắc → Claude Haiku; cache JD trùng | So sánh 3 cấu hình (chỉ Claude / chỉ local / routing) theo F1, chi phí quy đổi trên 1.000 JD, độ trễ — ghi trong `eval/RESULTS.md` |
+| **v2 — Model nhỏ + routing + cache** | Fine-tune Qwen3-1.7B (QLoRA) từ nhãn của model mở Qwen3-8B, không từ output Claude (ADR 0003); router: JD dễ → model local, khó/không chắc → Claude Haiku; cache JD trùng | So sánh 3 cấu hình (chỉ Claude / chỉ local / routing) theo F1, chi phí quy đổi trên 1.000 JD, độ trễ — ghi trong `eval/RESULTS.md` |
 | **v3 — MCP server tự viết** | JSON-RPC thuần, không dùng SDK, cho agent truy vấn DB JD chỉ đọc | Claude Code kết nối được · ≥3 tool · mỗi tool có test · trả lời đúng 5 câu hỏi mẫu trong `docs/mcp-demo.md` |
 | **v4 — Bài viết** | 1–2 bài phân tích: kiến trúc, eval, chi phí trên mỗi JD | Mọi con số trích từ `eval/RESULTS.md` |
 
@@ -23,7 +23,7 @@ Làm tuần tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước 
 Python ≥3.12 (máy dùng 3.14), `venv` + `pip`, `pytest`. Crawl và lưu trữ dùng stdlib (`urllib`, `html.parser`, `sqlite3`); thêm `pydantic`, Streamlit khi tới bước cần.
 Chạy module: `$env:PYTHONPATH="src"; .venv\Scripts\python -m jobmarket.crawl.itviec --limit 20`.
 LLM: **Claude Haiku 5.5 gọi qua `claude -p`** (Claude Code CLI, dùng gói Claude đã đăng nhập) — **không dùng API key, không dùng proxy biến gói thành API**. Lý do và số đo: `docs/adr/0001-llm-qua-claude-cli.md`. Cách gọi chi tiết: `.claude/rules/llm-extraction.md`.
-v2 thêm: thư viện fine-tune (chốt ở đầu v2). Trước khi dùng output Claude làm dữ liệu fine-tune: đọc điều khoản Anthropic và ghi ADR.
+v2 thêm: Ollama (chạy model mở local), thư viện fine-tune (chốt khi tới bước fine-tune). Usage Policy Anthropic cấm train model trên output Claude: output Claude (kể cả gold) không vào tập train (ADR 0003). Chạy hết trên máy local (GTX 1650, 4 GB VRAM), không Colab.
 
 ## Cấu trúc (tạo thư mục khi tới giai đoạn cần)
 
@@ -34,6 +34,7 @@ src/jobmarket/normalize/  # v1 · gộp tên kỹ năng đồng nghĩa
 src/jobmarket/route/      # v2 · router + cache
 src/jobmarket/mcp/        # v3 · MCP server
 train/                    # v2 · script fine-tune
+scripts/                  # tác vụ định kỳ (crawl hàng tuần)
 eval/                     # chấm điểm, RESULTS.md (chỉ thêm dòng, không sửa dòng cũ)
 data/raw/  data/gold/     # HTML gốc · nhãn tay
 app.py                    # Streamlit
