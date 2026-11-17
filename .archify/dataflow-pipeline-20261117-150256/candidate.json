@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "JobMarket VN — luồng dữ liệu v1",
+    "locale": "vi",
+    "output": ".archify/dataflow-pipeline-20261117-150256/pipeline.html",
+    "quality_profile": "showcase"
+  },
+  "stages": [
+    {
+      "label": "Nguồn"
+    },
+    {
+      "label": "Thu thập"
+    },
+    {
+      "label": "Lưu trữ"
+    },
+    {
+      "label": "Trích xuất"
+    },
+    {
+      "label": "Tổng hợp & đánh giá"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "itviec",
+      "type": "external",
+      "label": "ITviec",
+      "sublabel": "sitemap + trang JD",
+      "stage": 0,
+      "row": 1,
+      "tag": "124 JD"
+    },
+    {
+      "id": "raw",
+      "type": "database",
+      "label": "HTML gốc",
+      "sublabel": "data/raw/ · chỉ local",
+      "stage": 1,
+      "row": 0
+    },
+    {
+      "id": "crawl",
+      "type": "backend",
+      "label": "Crawl + lọc PII",
+      "sublabel": "jobposting.py",
+      "stage": 1,
+      "row": 1,
+      "tag": "≥2s/request"
+    },
+    {
+      "id": "jobs",
+      "type": "database",
+      "label": "Bảng jobs",
+      "sublabel": "data/jobs.db",
+      "stage": 2,
+      "row": 1
+    },
+    {
+      "id": "llm",
+      "type": "external",
+      "label": "claude -p",
+      "sublabel": "Haiku · gói Claude",
+      "stage": 3,
+      "row": 0,
+      "tag": "không API key"
+    },
+    {
+      "id": "extract",
+      "type": "backend",
+      "label": "Trích kỹ năng",
+      "sublabel": "extract/llm.py",
+      "stage": 3,
+      "row": 1,
+      "tag": "124/124 JD"
+    },
+    {
+      "id": "extractions",
+      "type": "database",
+      "label": "Bảng extractions",
+      "sublabel": "+ llm_calls · jobs.db",
+      "stage": 3,
+      "row": 2,
+      "tag": "cache"
+    },
+    {
+      "id": "aliases",
+      "type": "database",
+      "label": "aliases.csv",
+      "sublabel": "alias → tên chuẩn",
+      "stage": 3,
+      "row": 3
+    },
+    {
+      "id": "dashboard",
+      "type": "frontend",
+      "label": "Dashboard",
+      "sublabel": "Streamlit · công khai",
+      "stage": 4,
+      "row": 0,
+      "tag": "chưa deploy"
+    },
+    {
+      "id": "aggregate",
+      "type": "backend",
+      "label": "Tổng hợp",
+      "sublabel": "chuẩn hoá + đếm",
+      "stage": 4,
+      "row": 1,
+      "tag": "xong"
+    },
+    {
+      "id": "eval",
+      "type": "backend",
+      "label": "Eval P/R/F1",
+      "sublabel": "evaluate.py → RESULTS.md",
+      "stage": 4,
+      "row": 2,
+      "tag": "F1 0,851"
+    },
+    {
+      "id": "gold",
+      "type": "database",
+      "label": "Gold set",
+      "sublabel": "40 JD · nhãn Opus",
+      "stage": 4,
+      "row": 3
+    }
+  ],
+  "flows": [
+    {
+      "id": "pages",
+      "from": "itviec",
+      "to": "crawl",
+      "label": "HTML trang JD",
+      "variant": "emphasis"
+    },
+    {
+      "id": "save-raw",
+      "from": "crawl",
+      "to": "raw",
+      "label": "lưu trước parse"
+    },
+    {
+      "id": "save-jobs",
+      "from": "crawl",
+      "to": "jobs",
+      "label": "JD đã lọc PII",
+      "variant": "security"
+    },
+    {
+      "id": "batch",
+      "from": "jobs",
+      "to": "extract",
+      "label": "lô 20 JD",
+      "variant": "emphasis"
+    },
+    {
+      "id": "prompt",
+      "from": "extract",
+      "to": "llm",
+      "label": "prompt + schema"
+    },
+    {
+      "id": "answer",
+      "from": "llm",
+      "to": "extract",
+      "label": "structured_output"
+    },
+    {
+      "id": "write-skills",
+      "from": "extract",
+      "to": "extractions",
+      "label": "kỹ năng thô + log",
+      "variant": "emphasis"
+    },
+    {
+      "id": "read-skills",
+      "from": "extractions",
+      "to": "aggregate",
+      "label": "kỹ năng thô",
+      "variant": "emphasis"
+    },
+    {
+      "id": "alias-agg",
+      "from": "aliases",
+      "to": "aggregate",
+      "label": "alias → tên chuẩn"
+    },
+    {
+      "id": "publish",
+      "from": "aggregate",
+      "to": "dashboard",
+      "label": "skill_counts.csv",
+      "variant": "emphasis"
+    },
+    {
+      "id": "predictions",
+      "from": "extractions",
+      "to": "eval",
+      "label": "dự đoán (gold)"
+    },
+    {
+      "id": "alias-eval",
+      "from": "aliases",
+      "to": "eval",
+      "label": "chuẩn hoá 2 phía"
+    },
+    {
+      "id": "labels",
+      "from": "gold",
+      "to": "eval",
+      "label": "nhãn tay"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "Ranh giới công khai",
+      "items": [
+        "Chỉ skill_counts.csv (số đếm + link) được đưa lên mạng",
+        "HTML gốc và jobs.db chỉ nằm trên máy (điều khoản ITviec §2.2)",
+        "PII bị che trước khi ghi DB hoặc gửi LLM"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Trạng thái 2026-11-17",
+      "items": [
+        "Code xong cả 6 bước + eval, 52 test xanh",
+        "124/124 JD đã trích: 7 lần gọi, $0,098 quy đổi",
+        "Eval: LLM F1 0,851 vs thẻ ITviec 0,238 (nhãn Opus, chưa người duyệt)"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Chi phí và cache",
+      "items": [
+        "claude -p dùng hạn mức gói Claude, ghi chi phí quy đổi vào llm_calls",
+        "Cache theo hash(nội dung JD + prompt + model)",
+        "Chuẩn hoá lúc đọc: sửa aliases.csv không cần gọi lại LLM"
+      ]
+    }
+  ]
+}

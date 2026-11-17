@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "931301ca-a6de-4643-881d-f0a40e0a8d06",
+  "status": "current",
+  "command": "deliver",
+  "type": "dataflow",
+  "input": "d:\\Project\\.archify\\dataflow-pipeline-20261117-150256\\candidate.json",
+  "output": "D:\\Project\\.archify\\dataflow-pipeline-20261117-150256\\pipeline.html",
+  "specification": {
+    "sha256": "7334aa7f56a3b11c1616dbd7580ac4356bff5377367b402ebc6f103de237a049",
+    "bytes": 5676
+  },
+  "artifact": {
+    "sha256": "9aac047bee313439f57a95e5a450dd03324a8e7fb44af6288d908d67fbb0bbf8",
+    "bytes": 825223
+  }
+}

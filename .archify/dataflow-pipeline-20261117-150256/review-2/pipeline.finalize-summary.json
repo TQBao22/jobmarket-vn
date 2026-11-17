@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "dataflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "d:\\Project\\.archify\\dataflow-pipeline-20261117-150256\\candidate.json",
+    "sha256": "2a3bfa7ea06c30f5b1ea08fd9df07da0f607f690cb5f5ad6846a9ebe0536b3cd",
+    "bytes": 5654
+  },
+  "artifact": {
+    "path": "d:\\Project\\.archify\\dataflow-pipeline-20261117-150256\\pipeline.html",
+    "sha256": "cb0c962eba72d20df8197b580c2879d3e0e70a93caff46156bf62ce6d5f83b04",
+    "bytes": 825208
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [
+    {
+      "code": "i18n/locale-fallback",
+      "severity": "warning",
+      "message": "meta.locale \"vi\" has no bundled catalog and no usable meta.translations; the Viewer chrome and <html lang> fall back to English.",
+      "subject": {
+        "diagramType": "dataflow",
+        "path": "/meta/locale"
+      },
+      "evidence": {
+        "locale": "vi",
+        "bundledLocales": [
+          "en",
+          "zh-CN",
+          "zh-TW",
+          "es",
+          "ko"
+        ]
+      },
+      "supportedFixes": [
+        "Supply meta.translations for this locale.",
+        "Use a bundled locale: en, zh-CN, zh-TW, es, ko."
+      ]
+    }
+  ],
+  "diagnosticSummary": {
+    "total": 1,
+    "shown": 1,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "d:\\Project\\.archify\\dataflow-pipeline-20261117-150256\\review-2\\pipeline.finalize.json",
+    "summaryReceipt": "d:\\Project\\.archify\\dataflow-pipeline-20261117-150256\\review-2\\pipeline.finalize-summary.json",
+    "browserCheckReceipt": "d:\\Project\\.archify\\dataflow-pipeline-20261117-150256\\review-2\\pipeline.browser-check.json"
+  },
+  "update": {
+    "status": "update_available",
+    "installedVersion": "3.1.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": "https://github.com/tt-a1i/archify/releases/tag/v3.2.0",
+    "severity": "normal",
+    "checkedAt": "2026-11-17T08:03:17.566Z",
+    "source": "cache",
+    "noticeRequired": true,
+    "noticeText": "Archify update: 3.1.0 → 3.2.0. A previous check at 2026-11-17T08:03:17.566Z found a newer release. Release notes: https://github.com/tt-a1i/archify/releases/tag/v3.2.0. The installed Skill has not changed; ask to snooze or ignore this reminder.",
+    "eventKey": "archify@sha256:70e210265c59f24dcbdf2a502ff671104b5454e7ee7d3554aecd86bad32384f5"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 2834,
+  "visualReviewRecommendation": {
+    "action": "inspect-route-readability",
+    "signals": {
+      "resolvedCrossovers": 1
+    },
+    "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
+    "affectedRoutes": {
+      "crossings": [
+        {
+          "left": {
+            "id": "alias-agg",
+            "from": "aliases",
+            "to": "aggregate",
+            "label": "alias → tên chuẩn",
+            "collectionIndex": 8,
+            "artifactIndex": 9
+          },
+          "right": {
+            "id": "predictions",
+            "from": "extractions",
+            "to": "eval",
+            "label": "dự đoán (gold)",
+            "collectionIndex": 10,
+            "artifactIndex": 11
+          },
+          "point": [
+            880,
+            376
+          ]
+        }
+      ],
+      "detours": [],
+      "truncated": false
+    },
+    "repair": "Advisory only: this mode places or routes these relationships itself. Report them; do not remove relationships or meaning to reduce crossings."
+  }
+}
