@@ -1,0 +1,81 @@
+alias,canonical
+# shortcut: tên chuẩn chọn tay từ kỹ năng thô của LLM + thẻ ITviec (2026-11-17); đối chiếu nhãn ESCO khi tải bản offline
+# Khớp đúng hoa thường trước; dòng sau ghi đè dòng trước khi trùng sau khi hạ chữ thường (ReAct phải đứng trước React)
+ReAct,Agentic AI
+AI Agent,Agentic AI
+AI Agents,Agentic AI
+Autonomous Agents,Agentic AI
+Agent Orchestration,Multi-Agent Systems
+Multi-agent,Multi-Agent Systems
+Tool Calling,Function Calling
+Tool Use,Function Calling
+Chain-of-Thought,Prompt Engineering
+Large Language Models,LLM
+LLMs,LLM
+GenAI,Generative AI
+ChatGPT,OpenAI
+GPT,OpenAI
+OpenAI API,OpenAI
+Hugging Face Transformers,Hugging Face
+HuggingFace,Hugging Face
+SFT,Fine-tuning
+Instruction Tuning,Fine-tuning
+Fine tuning,Fine-tuning
+QLoRA,LoRA
+AI Evaluation,LLM Evaluation
+LLM-as-a-Judge,LLM Evaluation
+Hallucination Testing,LLM Evaluation
+Neural Network,Deep Learning
+Neural Networks,Deep Learning
+Vector DB,Vector Database
+Speech Recognition,ASR
+Speech-to-Text,ASR
+Text-to-Speech,TTS
+Async Programming,Asynchronous Programming
+Golang,Go
+NodeJS,Node.js
+ReactJS,React
+NextJS,Next.js
+Microsoft Azure,Azure
+Azure Cognitive Services,Azure AI
+Google Cloud,GCP
+Google Cloud Platform,GCP
+Amazon Web Services,AWS
+Amazon SageMaker,SageMaker
+Apache Airflow,Airflow
+Apache Spark,Spark
+PySpark,Spark
+Apache Kafka,Kafka
+Google BigQuery,BigQuery
+Postgres,PostgreSQL
+Cloud,Cloud Computing
+Microservices Architecture,Microservices
+RESTful API,REST API
+RESTful,REST API
+Automation Test,Test Automation
+Integration test,Integration Testing
+Robotic Process Automation (RPA),RPA
+Data modelling,Data Modeling
+Data Analytics,Data Analysis
+Machine learning (ML),Machine Learning
+ML,Machine Learning
+DL,Deep Learning
+CV,Computer Vision
+Natural Language Processing,NLP
+Retrieval-Augmented Generation,RAG
+Microsoft Excel,Excel
+# bổ sung 2026-11-17 từ output của JD ngoài gold set
+Data Pipelines,Data Pipeline
+Structured Outputs,Structured Output
+Embeddings,Embedding
+Re-ranking,Reranking
+Time-Series Analysis,Time Series Analysis
+Message Queues,Message Queue
+Vision-Language Models,Vision-Language Model
+AI Coding Assistants,AI Coding Assistant
+AI Coding Agents,AI Coding Assistant
+Model Context Protocol,MCP
+Recommender Systems,Recommendation Systems
+Data Warehousing,Data Warehouse
+Model Quantization,Quantization
+Hybrid Retrieval,Hybrid Search
