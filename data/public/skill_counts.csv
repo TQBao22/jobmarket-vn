@@ -1,0 +1,956 @@
+source,month,skill,jd_count,jd_total
+itviec,2026-10,Python,49,75
+itviec,2026-10,SQL,35,75
+itviec,2026-10,Machine Learning,30,75
+itviec,2026-10,LLM,27,75
+itviec,2026-10,Docker,24,75
+itviec,2026-10,CI/CD,23,75
+itviec,2026-10,RAG,22,75
+itviec,2026-10,Agentic AI,21,75
+itviec,2026-10,Git,19,75
+itviec,2026-10,Kubernetes,18,75
+itviec,2026-10,AWS,16,75
+itviec,2026-10,Data Quality,15,75
+itviec,2026-10,REST API,15,75
+itviec,2026-10,Data Modeling,14,75
+itviec,2026-10,Deep Learning,14,75
+itviec,2026-10,NLP,14,75
+itviec,2026-10,PyTorch,14,75
+itviec,2026-10,Vector Database,14,75
+itviec,2026-10,Data Governance,13,75
+itviec,2026-10,TensorFlow,13,75
+itviec,2026-10,GCP,12,75
+itviec,2026-10,LangChain,12,75
+itviec,2026-10,MLOps,12,75
+itviec,2026-10,Airflow,11,75
+itviec,2026-10,Azure,11,75
+itviec,2026-10,BigQuery,11,75
+itviec,2026-10,ETL,11,75
+itviec,2026-10,FastAPI,11,75
+itviec,2026-10,PostgreSQL,11,75
+itviec,2026-10,Computer Vision,10,75
+itviec,2026-10,ELT,10,75
+itviec,2026-10,Function Calling,10,75
+itviec,2026-10,Generative AI,10,75
+itviec,2026-10,Java,10,75
+itviec,2026-10,Kafka,10,75
+itviec,2026-10,MCP,10,75
+itviec,2026-10,Spark,10,75
+itviec,2026-10,dbt,10,75
+itviec,2026-10,LangGraph,9,75
+itviec,2026-10,Prompt Engineering,9,75
+itviec,2026-10,Data Pipeline,8,75
+itviec,2026-10,OpenAI,8,75
+itviec,2026-10,Transformer,8,75
+itviec,2026-10,TypeScript,8,75
+itviec,2026-10,gRPC,8,75
+itviec,2026-10,Claude,7,75
+itviec,2026-10,Data Analysis,7,75
+itviec,2026-10,Data Lineage,7,75
+itviec,2026-10,Data Warehouse,7,75
+itviec,2026-10,Django,7,75
+itviec,2026-10,Flask,7,75
+itviec,2026-10,Microservices,7,75
+itviec,2026-10,Model Monitoring,7,75
+itviec,2026-10,Multi-Agent Systems,7,75
+itviec,2026-10,MySQL,7,75
+itviec,2026-10,Pandas,7,75
+itviec,2026-10,Power BI,7,75
+itviec,2026-10,Scikit-learn,7,75
+itviec,2026-10,Business Intelligence,6,75
+itviec,2026-10,C,6,75
+itviec,2026-10,C++,6,75
+itviec,2026-10,CNN,6,75
+itviec,2026-10,Cursor,6,75
+itviec,2026-10,Go,6,75
+itviec,2026-10,Linux,6,75
+itviec,2026-10,MLflow,6,75
+itviec,2026-10,MongoDB,6,75
+itviec,2026-10,Recommendation Systems,6,75
+itviec,2026-10,Terraform,6,75
+itviec,2026-10,A/B Testing,5,75
+itviec,2026-10,ClickHouse,5,75
+itviec,2026-10,Feature Engineering,5,75
+itviec,2026-10,Gemini,5,75
+itviec,2026-10,Guardrails,5,75
+itviec,2026-10,Hugging Face,5,75
+itviec,2026-10,LLM Evaluation,5,75
+itviec,2026-10,LlamaIndex,5,75
+itviec,2026-10,Master Data Management,5,75
+itviec,2026-10,Metadata Management,5,75
+itviec,2026-10,Model Evaluation,5,75
+itviec,2026-10,NoSQL,5,75
+itviec,2026-10,NumPy,5,75
+itviec,2026-10,RNN,5,75
+itviec,2026-10,Reinforcement Learning,5,75
+itviec,2026-10,Snowflake,5,75
+itviec,2026-10,Chatbot,4,75
+itviec,2026-10,Claude Code,4,75
+itviec,2026-10,CrewAI,4,75
+itviec,2026-10,Data Catalog,4,75
+itviec,2026-10,Data Lakehouse,4,75
+itviec,2026-10,Data Masking,4,75
+itviec,2026-10,Databricks,4,75
+itviec,2026-10,GNN,4,75
+itviec,2026-10,GitHub Actions,4,75
+itviec,2026-10,GitHub Copilot,4,75
+itviec,2026-10,GitLab CI,4,75
+itviec,2026-10,Grafana,4,75
+itviec,2026-10,Milvus,4,75
+itviec,2026-10,OCR,4,75
+itviec,2026-10,Quantization,4,75
+itviec,2026-10,Semantic Layer,4,75
+itviec,2026-10,Semantic Search,4,75
+itviec,2026-10,Speech Processing,4,75
+itviec,2026-10,Star Schema,4,75
+itviec,2026-10,Statistics,4,75
+itviec,2026-10,Supervised Learning,4,75
+itviec,2026-10,Test Automation,4,75
+itviec,2026-10,pgvector,4,75
+itviec,2026-10,AI,3,75
+itviec,2026-10,API Design,3,75
+itviec,2026-10,API Testing,3,75
+itviec,2026-10,Anomaly Detection,3,75
+itviec,2026-10,Apache Iceberg,3,75
+itviec,2026-10,Asynchronous Programming,3,75
+itviec,2026-10,AutoGen,3,75
+itviec,2026-10,Causal Inference,3,75
+itviec,2026-10,Cloud Architecture,3,75
+itviec,2026-10,Cloud Computing,3,75
+itviec,2026-10,Data Engineering,3,75
+itviec,2026-10,Data Privacy,3,75
+itviec,2026-10,Data Visualization,3,75
+itviec,2026-10,Debezium,3,75
+itviec,2026-10,Distributed Systems,3,75
+itviec,2026-10,Event-Driven Architecture,3,75
+itviec,2026-10,Fine-tuning,3,75
+itviec,2026-10,IAM,3,75
+itviec,2026-10,Infrastructure as Code,3,75
+itviec,2026-10,JavaScript,3,75
+itviec,2026-10,Jenkins,3,75
+itviec,2026-10,Jira,3,75
+itviec,2026-10,Knowledge Distillation,3,75
+itviec,2026-10,Knowledge Graph,3,75
+itviec,2026-10,Kubeflow,3,75
+itviec,2026-10,LightGBM,3,75
+itviec,2026-10,Looker,3,75
+itviec,2026-10,Model Pruning,3,75
+itviec,2026-10,Multimodal AI,3,75
+itviec,2026-10,Node.js,3,75
+itviec,2026-10,ONNX,3,75
+itviec,2026-10,OpenCV,3,75
+itviec,2026-10,Performance Testing,3,75
+itviec,2026-10,Playwright,3,75
+itviec,2026-10,Prometheus,3,75
+itviec,2026-10,Qdrant,3,75
+itviec,2026-10,R,3,75
+itviec,2026-10,React,3,75
+itviec,2026-10,Redshift,3,75
+itviec,2026-10,SIEM,3,75
+itviec,2026-10,Scala,3,75
+itviec,2026-10,Structured Output,3,75
+itviec,2026-10,Tableau,3,75
+itviec,2026-10,TensorFlow Serving,3,75
+itviec,2026-10,ADK,2,75
+itviec,2026-10,AI Coding Assistant,2,75
+itviec,2026-10,AI Safety,2,75
+itviec,2026-10,AI Security,2,75
+itviec,2026-10,API Integration,2,75
+itviec,2026-10,ASR,2,75
+itviec,2026-10,Apache Superset,2,75
+itviec,2026-10,Appium,2,75
+itviec,2026-10,Azure Data Factory,2,75
+itviec,2026-10,Big Data,2,75
+itviec,2026-10,C#,2,75
+itviec,2026-10,CDC,2,75
+itviec,2026-10,CatBoost,2,75
+itviec,2026-10,Chroma,2,75
+itviec,2026-10,Clustering,2,75
+itviec,2026-10,Cypress,2,75
+itviec,2026-10,DGL,2,75
+itviec,2026-10,Dagster,2,75
+itviec,2026-10,Data Annotation,2,75
+itviec,2026-10,Data Architecture,2,75
+itviec,2026-10,Data Classification,2,75
+itviec,2026-10,Data Contracts,2,75
+itviec,2026-10,Data Lake,2,75
+itviec,2026-10,Data Mart,2,75
+itviec,2026-10,Data Security,2,75
+itviec,2026-10,Datadog,2,75
+itviec,2026-10,Delta Lake,2,75
+itviec,2026-10,Dimensional Modeling,2,75
+itviec,2026-10,Embedding,2,75
+itviec,2026-10,Encryption,2,75
+itviec,2026-10,Excel,2,75
+itviec,2026-10,Exploratory Data Analysis,2,75
+itviec,2026-10,FAISS,2,75
+itviec,2026-10,Feature Store,2,75
+itviec,2026-10,Forecasting,2,75
+itviec,2026-10,Fraud Detection,2,75
+itviec,2026-10,GPU,2,75
+itviec,2026-10,GitHub,2,75
+itviec,2026-10,Google Data Studio,2,75
+itviec,2026-10,Gradient Boosting,2,75
+itviec,2026-10,GraphQL,2,75
+itviec,2026-10,Hyperparameter Tuning,2,75
+itviec,2026-10,Image Processing,2,75
+itviec,2026-10,JMeter,2,75
+itviec,2026-10,KNN,2,75
+itviec,2026-10,Key Vault,2,75
+itviec,2026-10,LLM API,2,75
+itviec,2026-10,Llama,2,75
+itviec,2026-10,LoRA,2,75
+itviec,2026-10,MITRE ATT&CK,2,75
+itviec,2026-10,Matplotlib,2,75
+itviec,2026-10,Medallion Architecture,2,75
+itviec,2026-10,Message Queue,2,75
+itviec,2026-10,Microsoft Fabric,2,75
+itviec,2026-10,Mistral,2,75
+itviec,2026-10,Model Optimization,2,75
+itviec,2026-10,Model Serving,2,75
+itviec,2026-10,Nmap,2,75
+itviec,2026-10,Observability,2,75
+itviec,2026-10,Optimization,2,75
+itviec,2026-10,PEFT,2,75
+itviec,2026-10,Parquet,2,75
+itviec,2026-10,Penetration Testing,2,75
+itviec,2026-10,Pub/Sub,2,75
+itviec,2026-10,PyG,2,75
+itviec,2026-10,Red Teaming,2,75
+itviec,2026-10,Redis,2,75
+itviec,2026-10,Reference Data Management,2,75
+itviec,2026-10,SQL Server,2,75
+itviec,2026-10,SVM,2,75
+itviec,2026-10,Selenium,2,75
+itviec,2026-10,SingleStore,2,75
+itviec,2026-10,Survival Analysis,2,75
+itviec,2026-10,TTS,2,75
+itviec,2026-10,Time-Series Forecasting,2,75
+itviec,2026-10,Triton Inference Server,2,75
+itviec,2026-10,Vector Search,2,75
+itviec,2026-10,Vertex AI,2,75
+itviec,2026-10,Video Understanding,2,75
+itviec,2026-10,WebSocket,2,75
+itviec,2026-10,Workflow Automation,2,75
+itviec,2026-10,XGBoost,2,75
+itviec,2026-10,n8n,2,75
+itviec,2026-10,vLLM,2,75
+itviec,2026-10,ABAC,1,75
+itviec,2026-10,AI Coding Tools,1,75
+itviec,2026-10,AI Observability,1,75
+itviec,2026-10,AI QA,1,75
+itviec,2026-10,AI Red Teaming,1,75
+itviec,2026-10,API,1,75
+itviec,2026-10,API Gateway,1,75
+itviec,2026-10,ARX,1,75
+itviec,2026-10,AWS CDK,1,75
+itviec,2026-10,AWS Lambda,1,75
+itviec,2026-10,AWS S3,1,75
+itviec,2026-10,Access Control,1,75
+itviec,2026-10,Active Directory,1,75
+itviec,2026-10,Agentic Workflows,1,75
+itviec,2026-10,Agno,1,75
+itviec,2026-10,Alation,1,75
+itviec,2026-10,Allure Reports,1,75
+itviec,2026-10,Amazon Redshift,1,75
+itviec,2026-10,Ansible,1,75
+itviec,2026-10,Apache Atlas,1,75
+itviec,2026-10,Apache Flink,1,75
+itviec,2026-10,Apache Hudi,1,75
+itviec,2026-10,Apache NiFi,1,75
+itviec,2026-10,ArgoCD,1,75
+itviec,2026-10,Artificial Intelligence,1,75
+itviec,2026-10,Attention Mechanism,1,75
+itviec,2026-10,Audio Processing,1,75
+itviec,2026-10,Audio Streaming,1,75
+itviec,2026-10,Automated Testing,1,75
+itviec,2026-10,Automation,1,75
+itviec,2026-10,Azure AI,1,75
+itviec,2026-10,Azure Blob Storage,1,75
+itviec,2026-10,Azure Data Lake Storage,1,75
+itviec,2026-10,Azure DevOps,1,75
+itviec,2026-10,Azure Functions,1,75
+itviec,2026-10,Azure SQL,1,75
+itviec,2026-10,Azure Synapse,1,75
+itviec,2026-10,BI Tools,1,75
+itviec,2026-10,Batch Processing,1,75
+itviec,2026-10,Bayesian Statistics,1,75
+itviec,2026-10,Behavioral Analytics,1,75
+itviec,2026-10,BentoML,1,75
+itviec,2026-10,BloodHound,1,75
+itviec,2026-10,Bugzilla,1,75
+itviec,2026-10,Burp Suite,1,75
+itviec,2026-10,Business Glossary,1,75
+itviec,2026-10,CDP,1,75
+itviec,2026-10,CRM,1,75
+itviec,2026-10,CSV,1,75
+itviec,2026-10,CUDA,1,75
+itviec,2026-10,Celery,1,75
+itviec,2026-10,Change Data Capture,1,75
+itviec,2026-10,Churn Prediction,1,75
+itviec,2026-10,Classification,1,75
+itviec,2026-10,Cloud Security,1,75
+itviec,2026-10,CloudFormation,1,75
+itviec,2026-10,Cobalt Strike,1,75
+itviec,2026-10,Codex,1,75
+itviec,2026-10,Collibra,1,75
+itviec,2026-10,Command and Control,1,75
+itviec,2026-10,Confirmatory Factor Analysis,1,75
+itviec,2026-10,Confluence,1,75
+itviec,2026-10,Containerization,1,75
+itviec,2026-10,Context Engineering,1,75
+itviec,2026-10,Context Management,1,75
+itviec,2026-10,Contract-First Design,1,75
+itviec,2026-10,Conversational AI,1,75
+itviec,2026-10,Copilot,1,75
+itviec,2026-10,Customer Segmentation,1,75
+itviec,2026-10,Cybersecurity,1,75
+itviec,2026-10,DAX,1,75
+itviec,2026-10,DLP,1,75
+itviec,2026-10,DMS,1,75
+itviec,2026-10,DVC,1,75
+itviec,2026-10,Dart,1,75
+itviec,2026-10,Dashboard,1,75
+itviec,2026-10,Data Anonymization,1,75
+itviec,2026-10,Data Cleaning,1,75
+itviec,2026-10,Data Cleansing,1,75
+itviec,2026-10,Data Enrichment,1,75
+itviec,2026-10,Data Integration,1,75
+itviec,2026-10,Data Loss Prevention,1,75
+itviec,2026-10,Data Mining,1,75
+itviec,2026-10,Data Partitioning,1,75
+itviec,2026-10,Data Reconciliation,1,75
+itviec,2026-10,Data Science,1,75
+itviec,2026-10,Data Streaming,1,75
+itviec,2026-10,Data Synchronization,1,75
+itviec,2026-10,Data Vault,1,75
+itviec,2026-10,Databricks Genie,1,75
+itviec,2026-10,Dataflows Gen2,1,75
+itviec,2026-10,DeepEval,1,75
+itviec,2026-10,DeepSeek,1,75
+itviec,2026-10,Design Patterns,1,75
+itviec,2026-10,Detection-as-Code,1,75
+itviec,2026-10,Detectron2,1,75
+itviec,2026-10,DevOps,1,75
+itviec,2026-10,Diffusion Model,1,75
+itviec,2026-10,Digital Forensics,1,75
+itviec,2026-10,Distributed Training,1,75
+itviec,2026-10,Document AI,1,75
+itviec,2026-10,Document Intelligence,1,75
+itviec,2026-10,Document Layout Analysis,1,75
+itviec,2026-10,Document Understanding,1,75
+itviec,2026-10,DolphinScheduler,1,75
+itviec,2026-10,Domain-Driven Design,1,75
+itviec,2026-10,Draw.io,1,75
+itviec,2026-10,Drupal,1,75
+itviec,2026-10,Dynamic Pricing,1,75
+itviec,2026-10,ELK Stack,1,75
+itviec,2026-10,ERP,1,75
+itviec,2026-10,ERP Systems,1,75
+itviec,2026-10,Edge AI,1,75
+itviec,2026-10,Event Hub,1,75
+itviec,2026-10,Event Tracking,1,75
+itviec,2026-10,Experimental Design,1,75
+itviec,2026-10,Explainable AI,1,75
+itviec,2026-10,Facial Recognition,1,75
+itviec,2026-10,Figma,1,75
+itviec,2026-10,Flink,1,75
+itviec,2026-10,Flutter,1,75
+itviec,2026-10,Flutter Test,1,75
+itviec,2026-10,Flux,1,75
+itviec,2026-10,Frequency Severity Modeling,1,75
+itviec,2026-10,GLM,1,75
+itviec,2026-10,Geospatial Modeling,1,75
+itviec,2026-10,GitLab,1,75
+itviec,2026-10,GitOps,1,75
+itviec,2026-10,Google Cloud Composer,1,75
+itviec,2026-10,Google Cloud Vision,1,75
+itviec,2026-10,Google Colab,1,75
+itviec,2026-10,Google Sheets,1,75
+itviec,2026-10,Great Expectations,1,75
+itviec,2026-10,Helm,1,75
+itviec,2026-10,Hybrid Search,1,75
+itviec,2026-10,IMAP,1,75
+itviec,2026-10,Image Classification,1,75
+itviec,2026-10,Image Segmentation,1,75
+itviec,2026-10,Incident Response,1,75
+itviec,2026-10,Inference Optimization,1,75
+itviec,2026-10,Informatica,1,75
+itviec,2026-10,Information Extraction,1,75
+itviec,2026-10,Interrupted Time Series,1,75
+itviec,2026-10,Item Response Theory,1,75
+itviec,2026-10,JMAP,1,75
+itviec,2026-10,Jest,1,75
+itviec,2026-10,Jupyter,1,75
+itviec,2026-10,Key Management,1,75
+itviec,2026-10,Kinesis,1,75
+itviec,2026-10,Kotlin,1,75
+itviec,2026-10,LLM Agents,1,75
+itviec,2026-10,LLM Fine-tuning,1,75
+itviec,2026-10,LLM Pipeline,1,75
+itviec,2026-10,LLMOps,1,75
+itviec,2026-10,Lambda,1,75
+itviec,2026-10,LangSmith,1,75
+itviec,2026-10,Langfuse,1,75
+itviec,2026-10,Laravel,1,75
+itviec,2026-10,Lateral Movement,1,75
+itviec,2026-10,LiveKit,1,75
+itviec,2026-10,Llama Guard,1,75
+itviec,2026-10,LlamaCPP,1,75
+itviec,2026-10,Load Testing,1,75
+itviec,2026-10,Locust,1,75
+itviec,2026-10,Logistic Regression,1,75
+itviec,2026-10,Looker Studio,1,75
+itviec,2026-10,ML Pipeline,1,75
+itviec,2026-10,MVC,1,75
+itviec,2026-10,Magento,1,75
+itviec,2026-10,Make.com,1,75
+itviec,2026-10,Malware Analysis,1,75
+itviec,2026-10,Manual Testing,1,75
+itviec,2026-10,Metabase,1,75
+itviec,2026-10,Metasploit,1,75
+itviec,2026-10,Microsoft Dynamics 365,1,75
+itviec,2026-10,Microsoft Purview,1,75
+itviec,2026-10,Mimikatz,1,75
+itviec,2026-10,Miro,1,75
+itviec,2026-10,Model Calibration,1,75
+itviec,2026-10,Model Tuning,1,75
+itviec,2026-10,Multi-Tenant Architecture,1,75
+itviec,2026-10,Multilevel Modeling,1,75
+itviec,2026-10,NeMo Guardrails,1,75
+itviec,2026-10,Neo4j,1,75
+itviec,2026-10,Nessus,1,75
+itviec,2026-10,Next.js,1,75
+itviec,2026-10,Nuclei,1,75
+itviec,2026-10,OAuth2,1,75
+itviec,2026-10,ONNX Runtime,1,75
+itviec,2026-10,OOP,1,75
+itviec,2026-10,OSINT,1,75
+itviec,2026-10,Ollama,1,75
+itviec,2026-10,OpenAPI,1,75
+itviec,2026-10,OpenSearch,1,75
+itviec,2026-10,OpenTelemetry,1,75
+itviec,2026-10,Oracle,1,75
+itviec,2026-10,PHP,1,75
+itviec,2026-10,PaddleOCR,1,75
+itviec,2026-10,Parameter-Efficient Fine-Tuning,1,75
+itviec,2026-10,Pivot Table,1,75
+itviec,2026-10,Plotly,1,75
+itviec,2026-10,Polars,1,75
+itviec,2026-10,Postman,1,75
+itviec,2026-10,PowerShell,1,75
+itviec,2026-10,Presidio,1,75
+itviec,2026-10,Privilege Escalation,1,75
+itviec,2026-10,Promptfoo,1,75
+itviec,2026-10,Psychometrics,1,75
+itviec,2026-10,Pulumi,1,75
+itviec,2026-10,Purple Teaming,1,75
+itviec,2026-10,PyMC,1,75
+itviec,2026-10,QuickSight,1,75
+itviec,2026-10,Qwen,1,75
+itviec,2026-10,RBAC,1,75
+itviec,2026-10,RTP,1,75
+itviec,2026-10,RabbitMQ,1,75
+itviec,2026-10,Ragas,1,75
+itviec,2026-10,Ranking Systems,1,75
+itviec,2026-10,Regression Discontinuity Design,1,75
+itviec,2026-10,Regression Testing,1,75
+itviec,2026-10,Relational Databases,1,75
+itviec,2026-10,Reranking,1,75
+itviec,2026-10,Root Cause Analysis,1,75
+itviec,2026-10,S3,1,75
+itviec,2026-10,SAP,1,75
+itviec,2026-10,SCD,1,75
+itviec,2026-10,SFA,1,75
+itviec,2026-10,SIP,1,75
+itviec,2026-10,SMTP,1,75
+itviec,2026-10,SOAP,1,75
+itviec,2026-10,SSE,1,75
+itviec,2026-10,SSIS,1,75
+itviec,2026-10,SSRS,1,75
+itviec,2026-10,SageMaker,1,75
+itviec,2026-10,Security,1,75
+itviec,2026-10,Security Testing,1,75
+itviec,2026-10,Seldon,1,75
+itviec,2026-10,Self-Supervised Learning,1,75
+itviec,2026-10,Semantic Kernel,1,75
+itviec,2026-10,Server-Side Rendering,1,75
+itviec,2026-10,Shopware,1,75
+itviec,2026-10,Sigma Rules,1,75
+itviec,2026-10,Site Reliability Engineering,1,75
+itviec,2026-10,Snowflake Schema,1,75
+itviec,2026-10,Soda,1,75
+itviec,2026-10,Spatio-Temporal Modeling,1,75
+itviec,2026-10,Speaker Diarization,1,75
+itviec,2026-10,Spec-Driven Development,1,75
+itviec,2026-10,Speech-to-Speech,1,75
+itviec,2026-10,Spring Boot,1,75
+itviec,2026-10,Stan,1,75
+itviec,2026-10,Statistical Modeling,1,75
+itviec,2026-10,Stored Procedures,1,75
+itviec,2026-10,Stream Processing,1,75
+itviec,2026-10,Streamlit,1,75
+itviec,2026-10,Tailwind CSS,1,75
+itviec,2026-10,Tesseract,1,75
+itviec,2026-10,TestRail,1,75
+itviec,2026-10,Text Analytics,1,75
+itviec,2026-10,Text-to-SQL,1,75
+itviec,2026-10,Textract,1,75
+itviec,2026-10,Time Series Analysis,1,75
+itviec,2026-10,Tokenization,1,75
+itviec,2026-10,Tracing,1,75
+itviec,2026-10,Triton Server,1,75
+itviec,2026-10,Unity Catalog,1,75
+itviec,2026-10,Uplift Modeling,1,75
+itviec,2026-10,VLOOKUP,1,75
+itviec,2026-10,Video Analytics,1,75
+itviec,2026-10,Video Processing,1,75
+itviec,2026-10,Visio,1,75
+itviec,2026-10,Voice AI,1,75
+itviec,2026-10,Voice Activity Detection,1,75
+itviec,2026-10,WebRTC,1,75
+itviec,2026-10,Webhook,1,75
+itviec,2026-10,WordPress,1,75
+itviec,2026-10,XLOOKUP,1,75
+itviec,2026-10,YOLO,1,75
+itviec,2026-10,Zephyr Scale,1,75
+itviec,2026-10,asyncio,1,75
+itviec,2026-10,brms,1,75
+itviec,2026-10,eB2B,1,75
+itviec,2026-10,eKYC,1,75
+itviec,2026-10,k6,1,75
+itviec,2026-10,torchvision,1,75
+itviec,2026-11,Python,34,49
+itviec,2026-11,Agentic AI,20,49
+itviec,2026-11,SQL,18,49
+itviec,2026-11,Docker,17,49
+itviec,2026-11,LLM,17,49
+itviec,2026-11,CI/CD,16,49
+itviec,2026-11,AWS,15,49
+itviec,2026-11,RAG,13,49
+itviec,2026-11,Azure,11,49
+itviec,2026-11,Git,11,49
+itviec,2026-11,Java,11,49
+itviec,2026-11,Machine Learning,11,49
+itviec,2026-11,GCP,9,49
+itviec,2026-11,LangChain,9,49
+itviec,2026-11,Data Quality,8,49
+itviec,2026-11,Kubernetes,8,49
+itviec,2026-11,LangGraph,8,49
+itviec,2026-11,Linux,8,49
+itviec,2026-11,TypeScript,8,49
+itviec,2026-11,REST API,7,49
+itviec,2026-11,React,7,49
+itviec,2026-11,ETL,6,49
+itviec,2026-11,MCP,6,49
+itviec,2026-11,OpenAI,6,49
+itviec,2026-11,PostgreSQL,6,49
+itviec,2026-11,Prompt Engineering,6,49
+itviec,2026-11,Claude,5,49
+itviec,2026-11,Claude Code,5,49
+itviec,2026-11,Microservices,5,49
+itviec,2026-11,Terraform,5,49
+itviec,2026-11,Vector Database,5,49
+itviec,2026-11,AI Coding Assistant,4,49
+itviec,2026-11,C#,4,49
+itviec,2026-11,Cursor,4,49
+itviec,2026-11,Data Analysis,4,49
+itviec,2026-11,Data Governance,4,49
+itviec,2026-11,Data Lineage,4,49
+itviec,2026-11,Data Modeling,4,49
+itviec,2026-11,Embedding,4,49
+itviec,2026-11,FastAPI,4,49
+itviec,2026-11,Function Calling,4,49
+itviec,2026-11,Generative AI,4,49
+itviec,2026-11,GitLab CI,4,49
+itviec,2026-11,JSON,4,49
+itviec,2026-11,JavaScript,4,49
+itviec,2026-11,Langfuse,4,49
+itviec,2026-11,LlamaIndex,4,49
+itviec,2026-11,MySQL,4,49
+itviec,2026-11,OCR,4,49
+itviec,2026-11,PyTorch,4,49
+itviec,2026-11,Statistics,4,49
+itviec,2026-11,Test Automation,4,49
+itviec,2026-11,vLLM,4,49
+itviec,2026-11,.NET,3,49
+itviec,2026-11,API,3,49
+itviec,2026-11,API Integration,3,49
+itviec,2026-11,API Testing,3,49
+itviec,2026-11,Airflow,3,49
+itviec,2026-11,Azure OpenAI,3,49
+itviec,2026-11,BigQuery,3,49
+itviec,2026-11,Codex,3,49
+itviec,2026-11,Computer Vision,3,49
+itviec,2026-11,Data Lakehouse,3,49
+itviec,2026-11,Data Pipeline,3,49
+itviec,2026-11,Data Warehouse,3,49
+itviec,2026-11,Databricks,3,49
+itviec,2026-11,Delta Lake,3,49
+itviec,2026-11,ELT,3,49
+itviec,2026-11,Fine-tuning,3,49
+itviec,2026-11,GitHub,3,49
+itviec,2026-11,GitHub Actions,3,49
+itviec,2026-11,GitHub Copilot,3,49
+itviec,2026-11,Hybrid Search,3,49
+itviec,2026-11,Infrastructure as Code,3,49
+itviec,2026-11,Jenkins,3,49
+itviec,2026-11,LLM Evaluation,3,49
+itviec,2026-11,LoRA,3,49
+itviec,2026-11,Milvus,3,49
+itviec,2026-11,Multi-Agent Systems,3,49
+itviec,2026-11,Pinecone,3,49
+itviec,2026-11,Playwright,3,49
+itviec,2026-11,Quantization,3,49
+itviec,2026-11,Reranking,3,49
+itviec,2026-11,Spark,3,49
+itviec,2026-11,Unit Testing,3,49
+itviec,2026-11,dbt,3,49
+itviec,2026-11,AI Coding Tools,2,49
+itviec,2026-11,AI Tools,2,49
+itviec,2026-11,AI-Driven Development,2,49
+itviec,2026-11,AWS Glue,2,49
+itviec,2026-11,AWS Lambda,2,49
+itviec,2026-11,Agile,2,49
+itviec,2026-11,Amazon S3,2,49
+itviec,2026-11,Artificial Intelligence,2,49
+itviec,2026-11,Automated Testing,2,49
+itviec,2026-11,Azure DevOps,2,49
+itviec,2026-11,Azure Functions,2,49
+itviec,2026-11,Backtesting,2,49
+itviec,2026-11,Bash,2,49
+itviec,2026-11,BeautifulSoup,2,49
+itviec,2026-11,Big Data,2,49
+itviec,2026-11,C++,2,49
+itviec,2026-11,Chatbot,2,49
+itviec,2026-11,Claude Agent SDK,2,49
+itviec,2026-11,Copilot,2,49
+itviec,2026-11,CrewAI,2,49
+itviec,2026-11,Data Architecture,2,49
+itviec,2026-11,Data Integration,2,49
+itviec,2026-11,Data Management,2,49
+itviec,2026-11,Deep Learning,2,49
+itviec,2026-11,Distributed Systems,2,49
+itviec,2026-11,Document AI,2,49
+itviec,2026-11,Excel,2,49
+itviec,2026-11,Feature Engineering,2,49
+itviec,2026-11,Feature Store,2,49
+itviec,2026-11,Go,2,49
+itviec,2026-11,JMeter,2,49
+itviec,2026-11,Kafka,2,49
+itviec,2026-11,LLMOps,2,49
+itviec,2026-11,LangSmith,2,49
+itviec,2026-11,Load Testing,2,49
+itviec,2026-11,MLOps,2,49
+itviec,2026-11,Node.js,2,49
+itviec,2026-11,OpenAPI,2,49
+itviec,2026-11,OpenTelemetry,2,49
+itviec,2026-11,Oracle,2,49
+itviec,2026-11,PHP,2,49
+itviec,2026-11,Pandas,2,49
+itviec,2026-11,Performance Testing,2,49
+itviec,2026-11,Postman,2,49
+itviec,2026-11,Power BI,2,49
+itviec,2026-11,Pulumi,2,49
+itviec,2026-11,Qdrant,2,49
+itviec,2026-11,Recommendation Systems,2,49
+itviec,2026-11,Redshift,2,49
+itviec,2026-11,S3,2,49
+itviec,2026-11,SAP,2,49
+itviec,2026-11,SQL Server,2,49
+itviec,2026-11,Scrapy,2,49
+itviec,2026-11,Scrum,2,49
+itviec,2026-11,Security Testing,2,49
+itviec,2026-11,Selenium,2,49
+itviec,2026-11,Snowflake,2,49
+itviec,2026-11,Spring Boot,2,49
+itviec,2026-11,Tableau,2,49
+itviec,2026-11,Time Series Analysis,2,49
+itviec,2026-11,Vertex AI,2,49
+itviec,2026-11,Vision-Language Model,2,49
+itviec,2026-11,Weaviate,2,49
+itviec,2026-11,Web Scraping,2,49
+itviec,2026-11,XML,2,49
+itviec,2026-11,n8n,2,49
+itviec,2026-11,pgvector,2,49
+itviec,2026-11,A/B Testing,1,49
+itviec,2026-11,A10 Thunder,1,49
+itviec,2026-11,ADB,1,49
+itviec,2026-11,AI Testing Tools,1,49
+itviec,2026-11,API Analysis,1,49
+itviec,2026-11,API Design,1,49
+itviec,2026-11,API Development,1,49
+itviec,2026-11,AWS Bedrock,1,49
+itviec,2026-11,AWS CDK,1,49
+itviec,2026-11,AWS Fargate,1,49
+itviec,2026-11,AWS Lake Formation,1,49
+itviec,2026-11,AWS Step Functions,1,49
+itviec,2026-11,Access Control,1,49
+itviec,2026-11,Adversarial Testing,1,49
+itviec,2026-11,Agentic Workflows,1,49
+itviec,2026-11,Alembic,1,49
+itviec,2026-11,Algorithmic Trading,1,49
+itviec,2026-11,Allure Reports,1,49
+itviec,2026-11,Amazon Athena,1,49
+itviec,2026-11,Amazon Bedrock,1,49
+itviec,2026-11,Amazon QuickSight,1,49
+itviec,2026-11,Amazon Redshift,1,49
+itviec,2026-11,Android,1,49
+itviec,2026-11,Angular,1,49
+itviec,2026-11,Ansible,1,49
+itviec,2026-11,Anthropic,1,49
+itviec,2026-11,Apache Hudi,1,49
+itviec,2026-11,Apache Iceberg,1,49
+itviec,2026-11,Appium,1,49
+itviec,2026-11,Application Insights,1,49
+itviec,2026-11,Apstra,1,49
+itviec,2026-11,Arista,1,49
+itviec,2026-11,Arista CloudVision,1,49
+itviec,2026-11,Assistant UI,1,49
+itviec,2026-11,Athena,1,49
+itviec,2026-11,Atlassian,1,49
+itviec,2026-11,Aurora PostgreSQL,1,49
+itviec,2026-11,Automation,1,49
+itviec,2026-11,Azure AI Content Safety,1,49
+itviec,2026-11,Azure AI Search,1,49
+itviec,2026-11,Azure API Management,1,49
+itviec,2026-11,Azure Container Apps,1,49
+itviec,2026-11,Azure Data Lake Storage,1,49
+itviec,2026-11,Azure Durable Functions,1,49
+itviec,2026-11,Azure Firewall,1,49
+itviec,2026-11,Azure Key Vault,1,49
+itviec,2026-11,Azure Monitor,1,49
+itviec,2026-11,Azure SQL Database,1,49
+itviec,2026-11,Azure Service Bus,1,49
+itviec,2026-11,BGP,1,49
+itviec,2026-11,BI,1,49
+itviec,2026-11,BPMN,1,49
+itviec,2026-11,Bicep,1,49
+itviec,2026-11,Blazor WebAssembly,1,49
+itviec,2026-11,Blockchain,1,49
+itviec,2026-11,Business Analysis,1,49
+itviec,2026-11,CQRS,1,49
+itviec,2026-11,CSV,1,49
+itviec,2026-11,Change Data Capture,1,49
+itviec,2026-11,Charles Proxy,1,49
+itviec,2026-11,Check Point,1,49
+itviec,2026-11,ChromaDB,1,49
+itviec,2026-11,Cisco Nexus,1,49
+itviec,2026-11,Classification,1,49
+itviec,2026-11,Clean Architecture,1,49
+itviec,2026-11,Cloud Computing,1,49
+itviec,2026-11,Cloud Deployment,1,49
+itviec,2026-11,Cloud Run,1,49
+itviec,2026-11,CloudFormation,1,49
+itviec,2026-11,Cloudera,1,49
+itviec,2026-11,Cloudflare,1,49
+itviec,2026-11,Confluence,1,49
+itviec,2026-11,Cosmos DB,1,49
+itviec,2026-11,Cross-Validation,1,49
+itviec,2026-11,Customer Data Platform,1,49
+itviec,2026-11,Customer Segmentation,1,49
+itviec,2026-11,Data Catalog,1,49
+itviec,2026-11,Data Classification,1,49
+itviec,2026-11,Data Lake,1,49
+itviec,2026-11,Data Mapping,1,49
+itviec,2026-11,Data Mart,1,49
+itviec,2026-11,Data Migration,1,49
+itviec,2026-11,Data Mining,1,49
+itviec,2026-11,Data Observability,1,49
+itviec,2026-11,Data Privacy,1,49
+itviec,2026-11,Data Processing,1,49
+itviec,2026-11,Data Quality Management,1,49
+itviec,2026-11,Data Security,1,49
+itviec,2026-11,Data Streaming,1,49
+itviec,2026-11,Data Vault,1,49
+itviec,2026-11,Data Versioning,1,49
+itviec,2026-11,Data Visualization,1,49
+itviec,2026-11,Database,1,49
+itviec,2026-11,Databricks Workflows,1,49
+itviec,2026-11,Datadog,1,49
+itviec,2026-11,DeepEval,1,49
+itviec,2026-11,Design Patterns,1,49
+itviec,2026-11,DevOps,1,49
+itviec,2026-11,Dimensional Modeling,1,49
+itviec,2026-11,Distributed Data Processing,1,49
+itviec,2026-11,Docker Compose,1,49
+itviec,2026-11,Draw.io,1,49
+itviec,2026-11,ERP,1,49
+itviec,2026-11,ERP Systems,1,49
+itviec,2026-11,EVPN,1,49
+itviec,2026-11,Edge AI,1,49
+itviec,2026-11,Ensemble Methods,1,49
+itviec,2026-11,Event Grid,1,49
+itviec,2026-11,Event Sourcing,1,49
+itviec,2026-11,Event-Driven Architecture,1,49
+itviec,2026-11,Experimental Design,1,49
+itviec,2026-11,F5 BIG-IP,1,49
+itviec,2026-11,FAISS,1,49
+itviec,2026-11,Figma,1,49
+itviec,2026-11,Flask,1,49
+itviec,2026-11,Forecasting,1,49
+itviec,2026-11,FortiGate,1,49
+itviec,2026-11,FortiManager,1,49
+itviec,2026-11,FortiOS,1,49
+itviec,2026-11,Full Stack Development,1,49
+itviec,2026-11,GIS,1,49
+itviec,2026-11,Gazebo,1,49
+itviec,2026-11,Gemini,1,49
+itviec,2026-11,Google ADK,1,49
+itviec,2026-11,Google Cloud Storage,1,49
+itviec,2026-11,Google Vertex AI,1,49
+itviec,2026-11,Governance Dashboard,1,49
+itviec,2026-11,Gradient Boosting,1,49
+itviec,2026-11,Grafana,1,49
+itviec,2026-11,Guardrails,1,49
+itviec,2026-11,HTML,1,49
+itviec,2026-11,Hadoop,1,49
+itviec,2026-11,Helm,1,49
+itviec,2026-11,Hibernate,1,49
+itviec,2026-11,Hive,1,49
+itviec,2026-11,Hugging Face,1,49
+itviec,2026-11,Hyperparameter Tuning,1,49
+itviec,2026-11,IAM,1,49
+itviec,2026-11,IMAP,1,49
+itviec,2026-11,Inference Optimization,1,49
+itviec,2026-11,InfiniBand,1,49
+itviec,2026-11,Information Retrieval,1,49
+itviec,2026-11,Integration Testing,1,49
+itviec,2026-11,Intelligent Document Processing,1,49
+itviec,2026-11,Isaac Sim,1,49
+itviec,2026-11,JMAP,1,49
+itviec,2026-11,JPA,1,49
+itviec,2026-11,JSON Schema,1,49
+itviec,2026-11,JUnit,1,49
+itviec,2026-11,Jira,1,49
+itviec,2026-11,Juniper,1,49
+itviec,2026-11,Juniper SRX,1,49
+itviec,2026-11,KV Cache,1,49
+itviec,2026-11,Kimball,1,49
+itviec,2026-11,Knowledge Graph,1,49
+itviec,2026-11,LLM-as-Judge,1,49
+itviec,2026-11,Liquibase,1,49
+itviec,2026-11,Logic Apps,1,49
+itviec,2026-11,MISA,1,49
+itviec,2026-11,ML Pipelines,1,49
+itviec,2026-11,MS SQL,1,49
+itviec,2026-11,Mantine,1,49
+itviec,2026-11,Market Microstructure,1,49
+itviec,2026-11,Master Data Management,1,49
+itviec,2026-11,Message Queue,1,49
+itviec,2026-11,Metadata Management,1,49
+itviec,2026-11,Microsoft 365,1,49
+itviec,2026-11,Microsoft Dynamics,1,49
+itviec,2026-11,Microsoft Entra ID,1,49
+itviec,2026-11,Microsoft Foundry,1,49
+itviec,2026-11,Microsoft Graph API,1,49
+itviec,2026-11,Mobile App Data Mining,1,49
+itviec,2026-11,Model Evaluation,1,49
+itviec,2026-11,Model Monitoring,1,49
+itviec,2026-11,Model Registry,1,49
+itviec,2026-11,Module Federation,1,49
+itviec,2026-11,MuJoCo,1,49
+itviec,2026-11,Multi-Agent Orchestration,1,49
+itviec,2026-11,Multimodal AI,1,49
+itviec,2026-11,NDFC,1,49
+itviec,2026-11,NVIDIA,1,49
+itviec,2026-11,NVIDIA Dynamo,1,49
+itviec,2026-11,NVIDIA Jetson,1,49
+itviec,2026-11,NX-OS,1,49
+itviec,2026-11,Neo4j,1,49
+itviec,2026-11,NestJS,1,49
+itviec,2026-11,New Relic,1,49
+itviec,2026-11,Next.js,1,49
+itviec,2026-11,Nginx,1,49
+itviec,2026-11,NoSQL,1,49
+itviec,2026-11,Nokia,1,49
+itviec,2026-11,Nokia EDA,1,49
+itviec,2026-11,NumPy,1,49
+itviec,2026-11,OOP,1,49
+itviec,2026-11,Observability,1,49
+itviec,2026-11,Odoo,1,49
+itviec,2026-11,Ollama,1,49
+itviec,2026-11,OpenAI Agents SDK,1,49
+itviec,2026-11,OpenSearch,1,49
+itviec,2026-11,Optimization,1,49
+itviec,2026-11,Oracle NetSuite,1,49
+itviec,2026-11,PEFT,1,49
+itviec,2026-11,PII Classification,1,49
+itviec,2026-11,Parquet,1,49
+itviec,2026-11,Portfolio Optimization,1,49
+itviec,2026-11,Power Automate,1,49
+itviec,2026-11,PowerPoint,1,49
+itviec,2026-11,Process Automation,1,49
+itviec,2026-11,Pub/Sub,1,49
+itviec,2026-11,Puppeteer,1,49
+itviec,2026-11,Pydantic,1,49
+itviec,2026-11,Pydantic AI,1,49
+itviec,2026-11,R,1,49
+itviec,2026-11,RBAC,1,49
+itviec,2026-11,RLHF,1,49
+itviec,2026-11,ROS 2,1,49
+itviec,2026-11,RPA,1,49
+itviec,2026-11,RabbitMQ,1,49
+itviec,2026-11,Ragas,1,49
+itviec,2026-11,Random Forest,1,49
+itviec,2026-11,Real-Time Control,1,49
+itviec,2026-11,Real-time Data Pipeline,1,49
+itviec,2026-11,Regression,1,49
+itviec,2026-11,Regression Testing,1,49
+itviec,2026-11,Reinforcement Learning,1,49
+itviec,2026-11,Requests,1,49
+itviec,2026-11,Risk Management,1,49
+itviec,2026-11,Rust,1,49
+itviec,2026-11,SDLC,1,49
+itviec,2026-11,SGLang,1,49
+itviec,2026-11,SMTP,1,49
+itviec,2026-11,SOLID,1,49
+itviec,2026-11,SQLAlchemy,1,49
+itviec,2026-11,SSRS,1,49
+itviec,2026-11,STOMP,1,49
+itviec,2026-11,Scala,1,49
+itviec,2026-11,Scikit-learn,1,49
+itviec,2026-11,Secrets Management,1,49
+itviec,2026-11,Semantic Kernel,1,49
+itviec,2026-11,Sensor Fusion,1,49
+itviec,2026-11,Server-Sent Events,1,49
+itviec,2026-11,Simulation,1,49
+itviec,2026-11,Snowflake Schema,1,49
+itviec,2026-11,Spark Structured Streaming,1,49
+itviec,2026-11,Spring,1,49
+itviec,2026-11,Spring Core,1,49
+itviec,2026-11,Spring Framework,1,49
+itviec,2026-11,Star Schema,1,49
+itviec,2026-11,Structured Output,1,49
+itviec,2026-11,Supabase,1,49
+itviec,2026-11,Swagger,1,49
+itviec,2026-11,Technical Analysis,1,49
+itviec,2026-11,Temenos T24,1,49
+itviec,2026-11,TensorFlow,1,49
+itviec,2026-11,TensorRT-LLM,1,49
+itviec,2026-11,UAT,1,49
+itviec,2026-11,UML,1,49
+itviec,2026-11,UiPath,1,49
+itviec,2026-11,Unity Catalog,1,49
+itviec,2026-11,User Story,1,49
+itviec,2026-11,VXLAN,1,49
+itviec,2026-11,Vector Indexing,1,49
+itviec,2026-11,Vercel,1,49
+itviec,2026-11,Vite,1,49
+itviec,2026-11,Voicebot,1,49
+itviec,2026-11,Vue,1,49
+itviec,2026-11,Vue.js,1,49
+itviec,2026-11,Web API,1,49
+itviec,2026-11,Web Application Development,1,49
+itviec,2026-11,Web Application Testing,1,49
+itviec,2026-11,WebSocket,1,49
+itviec,2026-11,Webhook,1,49
+itviec,2026-11,Webhooks,1,49
+itviec,2026-11,Weights & Biases,1,49
+itviec,2026-11,aiohttp,1,49
+itviec,2026-11,asyncio,1,49
+itviec,2026-11,gRPC,1,49
+itviec,2026-11,llm-d,1,49
+itviec,2026-11,mitmproxy,1,49
+itviec,2026-11,pytest,1,49
+itviec,2026-11,vCenter,1,49
