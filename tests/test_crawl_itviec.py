@@ -10,6 +10,8 @@ from jobmarket.crawl.jobposting import Blocked, fetch, job_urls, parse
 FIXTURES = Path(__file__).parent / "fixtures" / "itviec"
 URL = "https://itviec.com/viec-lam-it/x-0001"
 SAMPLES = sorted(FIXTURES.glob("*.html"))
+# HTML gốc ITviec không đưa lên repo công khai (.gitignore) → CI bỏ qua các test cần nó.
+needs_fixtures = pytest.mark.skipif(not SAMPLES, reason="tests/fixtures/itviec/ chỉ có trên máy local")
 
 
 def load(name: str) -> str:
@@ -24,6 +26,7 @@ def test_parse_core_fields_not_empty(path):
     assert job["description"]
 
 
+@needs_fixtures
 def test_parse_values_from_job_posting():
     job = parse(load("ai-engineer-llm-python-docker-api-rag-vietinbank-0426.html"))
     assert job["title"] == "AI Engineer LLM, Python, Docker, API, RAG"
@@ -33,6 +36,7 @@ def test_parse_values_from_job_posting():
     assert job["tags"] == ["Generative AI", "API", "Docker", "Python", "RAG", "LLM"]
 
 
+@needs_fixtures
 def test_description_is_plain_text():
     job = parse(load("senior-data-engineer-kingfoodmart-4145.html"))
     assert "<" not in job["description"]

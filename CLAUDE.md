@@ -49,7 +49,10 @@ python -m venv .venv; .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 python -m pytest
 streamlit run app.py
+docker build -t jobmarket-vn . ; docker run -p 8501:8501 jobmarket-vn   # dashboard trong container
 ```
+
+CI (`.github/workflows/ci.yml`): mỗi PR và push lên `main` chạy `pytest` trên Python 3.12 và build + smoke test image Docker. Test cần HTML gốc ITviec tự bỏ qua trên CI.
 
 ## Quy tắc chung
 

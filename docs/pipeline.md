@@ -54,7 +54,7 @@ Chạy: `python -m jobmarket.aggregate`
 
 ## 6. Dashboard
 - `streamlit run app.py` (test: `tests/test_app.py` dùng `AppTest`), chỉ đọc `data/public/skill_counts.csv`. Dùng skill `dataviz` khi vẽ biểu đồ.
-- Deploy: Streamlit Community Cloud, nhánh `main`, Python 3.12 → https://jobmarket-vn-tndk7vgqeiu5zqkfkxpwrw.streamlit.app/ (công khai). Repo `TQBao22/jobmarket-vn` không chứa `data/raw/`, `jobs.db`, `tests/fixtures/itviec/`. Push lên `main` → app tự cập nhật.
+- Deploy: Streamlit Community Cloud, nhánh `main`, Python 3.12 → https://jobmarket-vn-tndk7vgqeiu5zqkfkxpwrw.streamlit.app/ (công khai). Repo `TQBao22/jobmarket-vn` không chứa `data/raw/`, `jobs.db`, `tests/fixtures/itviec/`. Push lên `main` → app tự cập nhật. `Dockerfile` đóng gói cùng dashboard (chỉ `app.py` + `data/public/`) để chạy ở nơi khác; CI build và gọi `/_stcore/health`.
 
 ## E. Eval
 - Gold set: 40 JD chọn cố định theo sha256(url) (`python -m jobmarket.gold init`), lưu `data/gold/labels.jsonl` (`{"url", "title", "skills"}`; `skills: null` = chưa gán). Không chép nội dung JD. Gán nhãn: `python -m jobmarket.gold show <n>` để đọc JD, sửa `skills` trong file.
