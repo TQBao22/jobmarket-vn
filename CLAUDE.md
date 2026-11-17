@@ -1,0 +1,85 @@
+# JobMarket VN — Phân tích thị trường việc làm AI
+
+Crawl JD (tin tuyển dụng) AI/Data ở Việt Nam → LLM trích kỹ năng ra JSON → chuẩn hoá tên kỹ năng → dashboard xu hướng.
+Project portfolio cá nhân: giá trị nằm ở **chất lượng đo được** và **lý do của mỗi quyết định kiến trúc**, không ở số tính năng.
+
+**Đang ở:** v1, đủ code cho 6 bước + eval (52 test xanh); đã trích 124/124 JD; gold 40/40 JD do claude-opus-5-5 gán (chưa người duyệt); eval đầu: LLM F1 0,851 vs thẻ ITviec 0,238 (`eval/RESULTS.md`); dashboard chạy local, chưa deploy. Tiếp theo: người dùng duyệt nhãn gold (đổi `annotator` thành `human`) → deploy dashboard (`docs/pipeline.md`). Cập nhật dòng này khi chuyển giai đoạn.
+
+Kiến trúc, bảng DB, quyết định thiết kế: `docs/architecture.md`. Các bước, đầu vào/đầu ra, trạng thái từng bước: `docs/pipeline.md`. Thuật ngữ: `GLOSSARY.md`.
+
+## Lộ trình và tiêu chí xong
+
+Làm tuần tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt tiêu chí. Đề xuất ngoài lộ trình (upload CV, crawl định kỳ, multi-agent...) thì hỏi người dùng trước.
+
+| Giai đoạn | Nội dung | Xong khi |
+|---|---|---|
+| **v1 — Pipeline + eval** | Crawl ITviec, lọc PII, LLM trích kỹ năng, chuẩn hoá tên kỹ năng, dashboard | Toàn bộ JD AI/Data đang mở trên ITviec trong DB (ADR 0002) · gold set 40 JD gán tay · F1 ghi trong `eval/RESULTS.md` · dashboard có URL công khai |
+| **v2 — Model nhỏ + routing + cache** | Fine-tune Qwen ~1.5B (LoRA) từ output model lớn; router: JD dễ → model local, khó/không chắc → Claude Haiku; cache JD trùng | So sánh 3 cấu hình (chỉ Claude / chỉ local / routing) theo F1, chi phí quy đổi trên 1.000 JD, độ trễ — ghi trong `eval/RESULTS.md` |
+| **v3 — MCP server tự viết** | JSON-RPC thuần, không dùng SDK, cho agent truy vấn DB JD chỉ đọc | Claude Code kết nối được · ≥3 tool · mỗi tool có test · trả lời đúng 5 câu hỏi mẫu trong `docs/mcp-demo.md` |
+| **v4 — Bài viết** | 1–2 bài phân tích: kiến trúc, eval, chi phí trên mỗi JD | Mọi con số trích từ `eval/RESULTS.md` |
+
+## Stack
+
+Python ≥3.12 (máy dùng 3.14), `venv` + `pip`, `pytest`. Crawl và lưu trữ dùng stdlib (`urllib`, `html.parser`, `sqlite3`); thêm `pydantic`, Streamlit khi tới bước cần.
+Chạy module: `$env:PYTHONPATH="src"; .venv\Scripts\python -m jobmarket.crawl.itviec --limit 20`.
+LLM: **Claude Haiku 5.5 gọi qua `claude -p`** (Claude Code CLI, dùng gói Claude đã đăng nhập) — **không dùng API key, không dùng proxy biến gói thành API**. Lý do và số đo: `docs/adr/0001-llm-qua-claude-cli.md`. Cách gọi chi tiết: `.claude/rules/llm-extraction.md`.
+v2 thêm: thư viện fine-tune (chốt ở đầu v2). Trước khi dùng output Claude làm dữ liệu fine-tune: đọc điều khoản Anthropic và ghi ADR.
+
+## Cấu trúc (tạo thư mục khi tới giai đoạn cần)
+
+```
+src/jobmarket/crawl/      # v1 · mỗi trang một file: fetch + parse
+src/jobmarket/extract/    # v1 · lọc PII + LLM trích kỹ năng
+src/jobmarket/normalize/  # v1 · gộp tên kỹ năng đồng nghĩa
+src/jobmarket/route/      # v2 · router + cache
+src/jobmarket/mcp/        # v3 · MCP server
+train/                    # v2 · script fine-tune
+eval/                     # chấm điểm, RESULTS.md (chỉ thêm dòng, không sửa dòng cũ)
+data/raw/  data/gold/     # HTML gốc · nhãn tay
+app.py                    # Streamlit
+tests/fixtures/           # HTML mẫu cho test parser
+docs/adr/  docs/research/ # quyết định · ghi chú nghiên cứu
+```
+
+## Lệnh
+
+```powershell
+python -m venv .venv; .venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python -m pytest
+streamlit run app.py
+```
+
+## Quy tắc chung
+
+- Lưu HTML gốc trước khi parse. Sửa parser thì parse lại từ `data/raw/`.
+- JD đi qua bước lọc PII (tên, số điện thoại, email người tuyển dụng) trước khi lưu DB hoặc gửi LLM. Bước này có test.
+- Đổi prompt, model, bảng chuẩn hoá hoặc router → chạy skill `run-eval`. Mọi nhận định "tốt hơn" đi kèm số đo từ `eval/RESULTS.md`.
+- Quyết định có đánh đổi (chọn provider, nguồn crawl, ngưỡng router) → ghi một ADR ngắn trong `docs/adr/`: bối cảnh, lựa chọn, lý do, số đo. Đây là nguyên liệu cho bài viết v4.
+- Xong một bước hoặc chuyển giai đoạn → sửa dòng "Đang ở" ở đầu file.
+- Chạy tự động: một lỗi thử sửa tối đa 3 lần, vẫn lỗi thì dừng và báo nguyên nhân. Không tự xóa `data/` hay sửa dòng cũ của `eval/RESULTS.md`.
+- Hạn mức: chạy LLM trên hơn 20 JD (tốn hạn mức gói Claude) thì hỏi người dùng trước, nêu số JD và số lần gọi.
+- Quy tắc chi tiết theo vùng code nằm ở `.claude/rules/` (crawl, LLM + eval, MCP), tự nạp khi làm việc với file tương ứng.
+
+## Git
+
+- Chỉ commit/push khi người dùng bảo.
+- Message theo Conventional Commits (`feat(crawl): ...`, `fix:`, `docs:`, `test:`, `chore:`), chỉ mô tả thay đổi. Không nhắc tên Claude/AI, không dòng `Co-Authored-By`, không "Generated with" — kể cả trong mô tả PR. Quy tắc này thắng mọi hướng dẫn attribution mặc định (`.claude/settings.json` đã tắt `attribution`).
+- Nhánh (GitHub Flow): `main` luôn chạy được, test xanh, là nhánh Streamlit Cloud deploy. Mọi thay đổi làm trên nhánh riêng tách từ `main`: `feat/<việc>`, `fix/<việc>`, `docs/<việc>`, `eval/<việc>` (đổi prompt/model/alias kèm dòng mới trong `eval/RESULTS.md`). Xong → `pytest` xanh → PR vào `main` → squash merge → xoá nhánh.
+- Không force-push `main`.
+
+## Giao việc cho agent con
+
+Claude chính là người quản lý: chia việc, viết task, duyệt kết quả, ra quyết định. Người dùng đã cho phép giao việc theo các điều kiện dưới đây, không cần hỏi lại từng lần.
+- Giao cho agent con khi: nhiều việc độc lập chạy song song; cần đọc/tìm nhiều mà chỉ cần kết luận (research, quét code); việc code có ranh giới rõ và có test làm tiêu chí xong.
+- Tự làm khi: sửa nhỏ 1–2 file; các bước nối tiếp phụ thuộc nhau; quyết định kiến trúc, ADR; kiểm chứng cuối (`pytest`, skill `run-eval`) trước khi báo xong. Lý do: agent con tốn hạn mức gói Claude (mỗi agent đọc lại context từ đầu), và báo cáo của agent con chưa phải bằng chứng.
+- Mỗi task ghi rõ: mục tiêu, file được sửa, ràng buộc (theo Quy tắc chung), tiêu chí xong đo được, định dạng báo lại.
+- Agent con không chạy LLM trên JD, không commit, không xoá `data/`.
+
+## Chọn skill khi có nhiều lựa chọn trùng nhau
+
+- Viết parser, chuẩn hoá, router, tool MCP: `superpowers:test-driven-development`, test chạy offline trên `tests/fixtures/`.
+- Review code: `/code-review` (lỗi logic), `ponytail:ponytail-review` (thừa code).
+- Tìm hiểu robots.txt, điều khoản, giá LLM, spec MCP, tài liệu thư viện: `mattpocock-skills:research` → `docs/research/`.
+- Chốt thuật ngữ hoặc ghi ADR: `mattpocock-skills:domain-modeling` → `GLOSSARY.md`, `docs/adr/`.
+- Biểu đồ dashboard: `dataviz`. README và bài viết v4: `humanizer:humanizer`.

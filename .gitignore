@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+data/raw/
+data/jobs.db
+.claude/settings.local.json
+tests/fixtures/itviec/
+context.txt
