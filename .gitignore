@@ -8,3 +8,4 @@ data/jobs.db
 .claude/settings.local.json
 tests/fixtures/itviec/
 context.txt
+data/logs/
