@@ -60,6 +60,7 @@ Chạy: `python -m jobmarket.aggregate`
 - Gold set: 40 JD chọn cố định theo sha256(url) (`python -m jobmarket.gold init`), lưu `data/gold/labels.jsonl` (`{"url", "title", "skills"}`; `skills: null` = chưa gán). Không chép nội dung JD. Gán nhãn: `python -m jobmarket.gold show <n>` để đọc JD, sửa `skills` trong file.
 - Chấm: `python -m jobmarket.evaluate --system llm|tags [--append]`.
 - Nhãn hiện tại do claude-opus-5-5 gán theo yêu cầu người dùng (trường `annotator` mỗi dòng), không phải nhãn người: F1 đo mức đồng ý Haiku–Opus, cùng họ model nên có thể cao hơn thực tế. Người duyệt dòng nào thì đổi `annotator` thành `human`.
+- Duyệt lần 1 (2026-11-17): 2/40 người duyệt (`human`); 38/40 do Sonnet 5.5 duyệt (`claude-opus-5-5+sonnet-5-5-review`): mỗi đề xuất thêm phải kèm câu trích nguyên văn, đã đối chiếu tự động với JD; kết quả 4 thêm, 1 xoá. Người duyệt thấy nhãn sẵn nên dễ đồng ý theo (anchoring): đây là kiểm tra lỗi rõ ràng, không thay được nhãn người.
 - Lỗi LLM nhiều nhất trên gold (lần chấm 2026-11-17) là lệch tên (`S3`/`Amazon S3`, `Server-Sent Events`/`SSE`, `Vue.js`/`Vue`). Không sửa bảng alias theo lỗi trên gold; bổ sung alias chỉ từ JD ngoài gold.
 - Rò rỉ đã biết: 8/40 JD gold nằm trong lô 20 JD đầu; bảng alias bản đầu lập từ output của lô này, và 2 JD gold (Nexlab, MB Bank) đã được xem khi kiểm tay. Prompt v1 không sửa theo chúng. Ghi vào ghi chú của dòng eval đầu tiên.
 - JD trong gold set chỉ dùng để chấm: viết prompt, ví dụ few-shot, ngưỡng router đều lấy từ JD ngoài gold set.

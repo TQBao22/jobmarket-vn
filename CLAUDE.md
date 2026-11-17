@@ -3,7 +3,7 @@
 Crawl JD (tin tuyển dụng) AI/Data ở Việt Nam → LLM trích kỹ năng ra JSON → chuẩn hoá tên kỹ năng → dashboard xu hướng.
 Project portfolio cá nhân: giá trị nằm ở **chất lượng đo được** và **lý do của mỗi quyết định kiến trúc**, không ở số tính năng.
 
-**Đang ở:** v1, đủ code cho 6 bước + eval (52 test xanh); đã trích 124/124 JD; gold 40/40 JD do claude-opus-5-5 gán; eval đầu: LLM F1 0,851 vs thẻ ITviec 0,238 (`eval/RESULTS.md`); dashboard công khai tại https://jobmarket-vn-tndk7vgqeiu5zqkfkxpwrw.streamlit.app/ (Streamlit Cloud, từ `main`). Còn lại cho v1: người dùng duyệt nhãn gold, đã duyệt 1/40 (đổi `annotator` thành `human`). Cập nhật dòng này khi chuyển giai đoạn.
+**Đang ở:** v1, đủ code cho 6 bước + eval (52 test xanh); đã trích 124/124 JD; gold 40/40 JD: 2 người duyệt, 38 Opus gán + Sonnet duyệt; eval: LLM F1 0,852 vs thẻ ITviec 0,238 (`eval/RESULTS.md`); dashboard công khai tại https://jobmarket-vn-tndk7vgqeiu5zqkfkxpwrw.streamlit.app/ (Streamlit Cloud, từ `main`). Chờ người dùng chốt: tiêu chí v1 "gold gán tay" chưa đạt đúng nghĩa (nhãn vẫn là AI) → giữ tiêu chí hay sửa rồi đóng v1. Cập nhật dòng này khi chuyển giai đoạn.
 
 Kiến trúc, bảng DB, quyết định thiết kế: `docs/architecture.md`. Các bước, đầu vào/đầu ra, trạng thái từng bước: `docs/pipeline.md`. Thuật ngữ: `GLOSSARY.md`.
 
