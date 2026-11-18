@@ -20,7 +20,7 @@ Phần cứng: GTX 1650, 4 GB VRAM. Dữ liệu: 128 JD AI/Data, 40 JD là gold 
 - Nhãn train: Qwen3-8B (Apache-2.0) chạy local (Ollama, lượng tử hoá, một phần trên CPU) trích kỹ năng trên JD **ngoài gold**, cùng prompt/schema với Claude.
 - Student: Qwen3-1.7B (Apache-2.0), QLoRA trên GTX 1650. Không dùng Qwen2.5-3B (giấy phép qwen-research, phi thương mại).
 - Claude Haiku chỉ dùng để suy luận: baseline và nhánh fallback của router. Không output Claude nào (kể cả gold do Opus gán) vào tập train.
-- Thứ tự: (1) đo Qwen3-1.7B và Qwen3-8B few-shot chưa fine-tune trên gold làm mốc; (2) sinh nhãn teacher; (3) fine-tune; (4) router + cache; (5) so 3 cấu hình kèm khoảng tin cậy bootstrap của F1 (40 JD gold cho sai số lớn).
+- Thứ tự: (1) đo Qwen3-1.7B và Qwen3-8B chưa fine-tune, prompt v1 zero-shot, trên gold làm mốc; (2) sinh nhãn teacher; (3) fine-tune; (4) router + cache; (5) so 3 cấu hình kèm khoảng tin cậy bootstrap của F1 (40 JD gold cho sai số lớn).
 
 ## Lý do
 - Tuân thủ điều khoản là điều kiện để đăng repo và bài viết công khai.

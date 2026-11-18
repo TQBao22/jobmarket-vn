@@ -113,18 +113,21 @@ def _build_input(batch: list[tuple[str, dict]]) -> str:
 
 
 def extract(conn, model: str, prompt_version: str, system: str, limit: int | None = None,
-            runner: Callable[[str, str], str] = claude_runner) -> Counter:
-    """Trích cho mọi JD chưa có kết quả với (model, prompt_version); mỗi lô ≤20 JD là một lần gọi."""
+            runner: Callable[[str, str], str] = claude_runner, batch: int = BATCH,
+            only: set[str] | None = None) -> Counter:
+    """Trích cho mọi JD chưa có kết quả với (model, prompt_version); mỗi lô ≤`batch` JD là một lần gọi.
+    `only`: chỉ xét JD có url trong tập này (vd. gold set khi đo model mới)."""
     done = {r["content_hash"] for r in db.load_extractions(conn, model, prompt_version)}
     pending: dict[str, dict] = {}
     for job in db.load_all(conn):
         h = content_hash(job["description"] or "")
-        if job["description"] and h not in done:
+        if job["description"] and h not in done and (only is None or job["url"] in only):
             pending.setdefault(h, job)
     todo = list(pending.items())[:limit]
     stats = Counter(pending=len(pending))
-    for start in range(0, len(todo), BATCH):
-        batch = [(h[:12], job) for h, job in todo[start:start + BATCH]]
+    size = batch
+    for start in range(0, len(todo), size):
+        batch = [(h[:12], job) for h, job in todo[start:start + size]]
         t0 = time.monotonic()
         parsed = parse_output(runner(system, _build_input(batch)), {i for i, _ in batch})
         call_id = db.save_call(conn, {
@@ -136,7 +139,7 @@ def extract(conn, model: str, prompt_version: str, system: str, limit: int | Non
         if parsed.error:
             stats["failed_batches"] += 1
             continue
-        for (jd_id, job), (h, _) in zip(batch, todo[start:start + BATCH]):
+        for (jd_id, job), (h, _) in zip(batch, todo[start:start + size]):
             if jd_id in parsed.skills:
                 db.save_extraction(conn, h, model, prompt_version, job["url"], parsed.skills[jd_id], call_id)
                 stats["extracted"] += 1
