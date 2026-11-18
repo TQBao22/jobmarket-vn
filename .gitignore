@@ -12,3 +12,4 @@ data/logs/
 
 web/node_modules/
 web/dist/
+*.log
