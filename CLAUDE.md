@@ -48,7 +48,7 @@ docs/adr/  docs/research/ # quyết định · ghi chú nghiên cứu
 
 ```powershell
 python -m venv .venv; .venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 python -m pytest
 streamlit run app.py
 scripts\run_local.ps1                      # BE FastAPI :8000 + FE React :5173 + Ollama (v3, local)

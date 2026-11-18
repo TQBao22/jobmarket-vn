@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: "3.12"  # cùng bản với Streamlit Cloud
           cache: pip
-      - run: pip install -r requirements.txt
+      - run: pip install -r requirements-dev.txt
       - run: python -m pytest -q
         env:
           PYTHONPATH: src
