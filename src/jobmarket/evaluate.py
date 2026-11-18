@@ -3,6 +3,7 @@
   python -m jobmarket.evaluate --system llm           # kết quả LLM (model + prompt hiện tại)
   python -m jobmarket.evaluate --system tags          # baseline: thẻ ITviec
   python -m jobmarket.evaluate --system llm --append  # thêm 1 dòng vào eval/RESULTS.md
+  python -m jobmarket.evaluate --split test           # mặc định chấm nửa dev; test chỉ chạy khi chốt cấu hình
 """
 import argparse
 import datetime
@@ -57,6 +58,8 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--system", choices=["llm", "tags"], default="llm")
     ap.add_argument("--prompt", default=llm.PROMPT_VERSION)
+    ap.add_argument("--model", default=llm.MODEL, help="id model trong bảng extractions (Claude hoặc tên model Ollama)")
+    ap.add_argument("--split", choices=["dev", "test", "all"], default="dev", help="nửa gold để chấm (gold.dev_test)")
     ap.add_argument("--append", action="store_true")
     ap.add_argument("--note", default="")
     args = ap.parse_args()
@@ -66,17 +69,22 @@ if __name__ == "__main__":
         preds = {j["url"]: j["tags"] or [] for j in jobs}
         config, model, prompt, cost, latency = "baseline", "thẻ ITviec", "—", "$0", "—"
     else:
-        by_hash = {e["content_hash"]: e["skills"] for e in db.load_extractions(conn, llm.MODEL, args.prompt)}
+        by_hash = {e["content_hash"]: e["skills"] for e in db.load_extractions(conn, args.model, args.prompt)}
         preds = {j["url"]: by_hash[h] for j in jobs if (h := llm.content_hash(j["description"] or "")) in by_hash}
-        config, model, prompt = "api", llm.MODEL, args.prompt
-        cost, latency = _cost_and_latency(conn, llm.MODEL, args.prompt)
-    r = score(gold.load(), preds, load_aliases())
+        config = "api" if args.model.startswith("claude") else "local"
+        model, prompt = args.model, args.prompt
+        cost, latency = _cost_and_latency(conn, args.model, args.prompt)
+    labels = gold.load()
+    if args.split != "all":
+        part = dict(zip(["dev", "test"], gold.dev_test(list(labels))))[args.split]
+        labels = {u: s for u, s in labels.items() if u in part}
+    r = score(labels, preds, load_aliases())
     if r["n_jd"] == 0:
         raise SystemExit("Gold set chưa có JD nào được gán nhãn — xem `python -m jobmarket.gold`.")
     print(f"{args.system}: P={r['p']:.3f} R={r['r']:.3f} F1={r['f1']:.3f} trên {r['n_jd']} JD (thiếu dự đoán: {r['missing_pred']})")
     for d in r["worst"]:
         print(f"- {d['url']}\n  sót: {d['missed']}\n  thừa: {d['extra']}")
-    note = f"{r['n_jd']} JD gold. {args.note}".strip()
+    note = f"{r['n_jd']} JD gold ({args.split}). {args.note}".strip()
     row = f"| {datetime.date.today()} | {config} | {model} | {prompt} | {r['p']:.3f} | {r['r']:.3f} | {r['f1']:.3f} | {cost} | {latency} | {note} |\n"
     print(row, end="")
     if args.append:

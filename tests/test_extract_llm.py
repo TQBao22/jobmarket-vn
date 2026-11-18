@@ -101,3 +101,21 @@ def test_extract_respects_limit(tmp_path):
     for i in range(5):
         db.save(conn, job(i, f"Mô tả {i}"))
     assert llm.extract(conn, MODEL, PROMPT, "system", limit=3, runner=FakeRunner())["extracted"] == 3
+
+
+def test_extract_batch_size_one_calls_runner_per_jd(tmp_path):
+    conn = db.connect(tmp_path / "jobs.db")
+    for i in range(3):
+        db.save(conn, job(i, f"Cần Python {i}."))
+    runner = FakeRunner()
+    stats = llm.extract(conn, "qwen3:1.7b", PROMPT, "sys", runner=runner, batch=1)
+    assert runner.calls == 3 and stats["extracted"] == 3
+
+
+def test_extract_only_restricts_to_given_urls(tmp_path):
+    conn = db.connect(tmp_path / "jobs.db")
+    for i in range(3):
+        db.save(conn, job(i, f"Cần Python {i}."))
+    stats = llm.extract(conn, MODEL, PROMPT, "sys", runner=FakeRunner(), only={job(1)["url"]})
+    assert stats["extracted"] == 1
+    assert [e["url"] for e in db.load_extractions(conn, MODEL, PROMPT)] == [job(1)["url"]]

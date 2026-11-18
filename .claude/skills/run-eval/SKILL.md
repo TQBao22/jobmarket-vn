@@ -5,7 +5,9 @@ description: Eval trích xuất kỹ năng trên gold set, ghi một dòng vào 
 
 # Chạy eval trích xuất
 
-Lệnh (từ thư mục gốc, `PYTHONPATH=src`): `python -m jobmarket.gold status`, `python -m jobmarket.extract.llm`, `python -m jobmarket.evaluate --system llm|tags [--append] [--note "..."]`.
+Lệnh (từ thư mục gốc, `PYTHONPATH=src`): `python -m jobmarket.gold status`, `python -m jobmarket.extract.llm`, `python -m jobmarket.evaluate --system llm|tags [--model ...] [--split dev|test|all] [--append] [--note "..."]`.
+
+Gold chia đôi cố định (`gold.dev_test`): **dev** (mặc định) để so cấu hình khi đang thử; **test** chỉ chấm một lần khi đã chốt cấu hình, ghi rõ trong ghi chú. So sánh chỉ giữa các dòng cùng nửa.
 
 1. Kiểm tra `data/gold/labels.jsonl` có JD đã gán nhãn (`gold status`). Chưa có → báo người dùng cần gán nhãn trước, dừng.
 2. Chạy trích xuất cho các JD gold chưa có kết quả với cấu hình hiện tại (model, phiên bản prompt); cache bỏ qua JD đã trích.

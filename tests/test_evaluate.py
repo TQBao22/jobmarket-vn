@@ -49,3 +49,11 @@ def test_gold_init_writes_unlabeled_entries(tmp_path):
     path = tmp_path / "labels.jsonl"
     gold.init([{"url": "u1", "title": "t1"}, {"url": "u2", "title": "t2"}], path, 2)
     assert gold.load(path) == {"u1": None, "u2": None}
+
+
+def test_dev_test_split_is_half_half_disjoint_and_order_free():
+    urls = [f"https://x/{i}" for i in range(40)]
+    dev, test = gold.dev_test(urls)
+    assert len(dev) == len(test) == 20
+    assert dev.isdisjoint(test) and dev | test == set(urls)
+    assert gold.dev_test(list(reversed(urls))) == (dev, test)

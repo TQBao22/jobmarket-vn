@@ -22,6 +22,14 @@ def select(urls: list[str], n: int) -> list[str]:
     return sorted(urls, key=lambda u: hashlib.sha256(u.encode()).hexdigest())[:n]
 
 
+def dev_test(urls: list[str]) -> tuple[set[str], set[str]]:
+    """Chia gold làm đôi, cố định theo sha256("split:" + url). Dev để thử prompt/cấu hình; test chỉ chấm khi chốt."""
+    # shortcut: thêm JD vào gold sẽ xáo lại tập; khi mở rộng gold thì lưu danh sách test ra file
+    ordered = sorted(urls, key=lambda u: hashlib.sha256(f"split:{u}".encode()).hexdigest())
+    half = len(ordered) // 2
+    return set(ordered[:half]), set(ordered[half:])
+
+
 def init(jobs: list[dict], path: Path = LABELS, n: int = SIZE) -> None:
     if path.exists():
         raise FileExistsError(f"{path} đã có — không ghi đè nhãn đã gán")
