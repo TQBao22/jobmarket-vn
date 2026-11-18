@@ -15,7 +15,7 @@ v1 có dashboard Streamlit đọc CSV tổng hợp, deploy công khai. Người 
 
 ## Quyết định
 - BE: FastAPI `localhost:8000`, route `/api/*` (hợp đồng: `docs/api.md`), đọc `jobs.db` chế độ chỉ đọc. Hàm truy vấn nằm ở `src/jobmarket/query.py`, dùng chung với MCP server (v3).
-- FE: Vite + React + TypeScript trong `web/`, `localhost:5173`, gọi BE qua proxy `/api`. Không UI kit, không thư viện biểu đồ.
+- FE: Vite + React + TypeScript trong `frontend/`, `localhost:5173`, gọi BE qua proxy `/api`. Không UI kit, không thư viện biểu đồ.
 - Khớp CV: kỹ năng CV trích bằng model local qua Ollama; xếp hạng JD đang mở theo độ phủ kỹ năng có trọng số `ln(N/df)+1`; trả kỹ năng còn thiếu. CV chỉ xử lý trong bộ nhớ.
 - Không deploy BE/FE. Dashboard Streamlit công khai giữ nguyên (đọc CSV).
 
