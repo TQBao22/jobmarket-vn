@@ -9,7 +9,7 @@ Kiến trúc, bảng DB, quyết định thiết kế: `docs/architecture.md`. C
 
 ## Lộ trình và tiêu chí xong
 
-Làm tuần tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt tiêu chí. Ngoại lệ người dùng đã duyệt: phần FastAPI + FE của v3 làm song song v2 (nhánh riêng, merge sau v2). Đề xuất ngoài lộ trình (multi-agent...) thì hỏi người dùng trước.
+Làm tuần tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt tiêu chí. Ngoại lệ người dùng đã duyệt: phần FastAPI + FE + MCP server của v3 làm song song v2, mỗi phần một nhánh riêng, merge độc lập khi `pytest` xanh. Đề xuất ngoài lộ trình (multi-agent...) thì hỏi người dùng trước.
 
 | Giai đoạn | Nội dung | Xong khi |
 |---|---|---|
