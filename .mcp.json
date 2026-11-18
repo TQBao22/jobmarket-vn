@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "jobmarket": {
+      "command": ".venv/Scripts/python.exe",
+      "args": ["-m", "jobmarket.mcp"],
+      "env": {"PYTHONPATH": "src"}
+    }
+  }
+}

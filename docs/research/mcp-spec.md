@@ -151,8 +151,10 @@ Kiểm `_meta` trên mọi request, kể cả `server/discover`:
 - thiếu `_meta`, `protocolVersion` hoặc `clientCapabilities` → `-32602`;
 - `protocolVersion` khác `2026-07-28` → `-32022`.
 
+## Đã xác minh khi chạy thật (2026-11-18)
+- Server `jobmarket.mcp` chỉ hỗ trợ `2026-07-28` (kiểm `_meta` mọi request, `initialize` → -32601). `claude -p` 2.1.325 với `--mcp-config .mcp.json` gọi được `top_skills` và trả đúng số liệu DB. Vậy Claude Code ở lại modern sau `DiscoverResult` và gửi `_meta` hợp lệ trên `tools/list`/`tools/call` (nếu không, server trả -32601/-32602 và không có tool).
+
 ## Chưa xác minh
-- Sau khi nhận `DiscoverResult`, Claude Code 2.1.325 có gửi `tools/list`/`tools/call` kèm `_meta` đúng như spec không? Mới chỉ thấy probe. Cần ghi log stdin của server khi chạy thật.
 - Ví dụ `tools/list` và `tools/call` trong tools.mdx 2026 **không có** `_meta`, trong khi schema bắt buộc có. Có thể ví dụ chỉ rút gọn. Server nên kiểm theo schema, nhưng nếu Claude Code thật không gửi `_meta` trên `tools/list` thì phải nới quy tắc này.
 - Claude Code chờ probe bao lâu trước khi lùi về `initialize`: spec chỉ ghi "reasonable timeout", không có số.
 - Claude Code có dùng `structuredContent` hay chỉ đọc `content` text: không có tài liệu sơ cấp. Cứ gửi cả hai theo SHOULD của spec.
