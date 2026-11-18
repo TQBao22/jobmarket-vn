@@ -7,5 +7,5 @@ catch { Start-Process ollama -ArgumentList "serve" -WindowStyle Minimized }
 $env:PYTHONPATH = Join-Path $root "src"
 if (-not $env:JOBMARKET_DB) { $env:JOBMARKET_DB = Join-Path $root "data\jobs.db" }
 Start-Process (Join-Path $root ".venv\Scripts\python.exe") -ArgumentList "-m", "uvicorn", "jobmarket.api.app:app", "--port", "8000" -WorkingDirectory $root
-Start-Process "cmd.exe" -ArgumentList "/k", "npm run dev" -WorkingDirectory (Join-Path $root "web")
+Start-Process "cmd.exe" -ArgumentList "/k", "npm run dev" -WorkingDirectory (Join-Path $root "frontend")
 "Mở http://localhost:5173 (API: http://localhost:8000/docs)"
