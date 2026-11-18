@@ -14,6 +14,9 @@ from jobmarket.extract import llm
 OLLAMA = "http://localhost:11434/api/chat"
 NUM_CTX = 8192  # 1 JD + prompt ≈ 2–4K token; KV cache lớn hơn không vừa 4 GB VRAM
 MAX_OUTPUT = 1024  # trung vị ~130 token/JD; model nhỏ đôi khi lặp vô hạn (đo: 27K token ở 1 JD)
+# think=true: phần suy nghĩ tính vào num_predict nên cần ngân sách lớn hơn, vẫn có trần để chặn lặp vô hạn
+THINK_MAX_OUTPUT = 4096
+THINK_NUM_CTX = 12288  # JD ≤ ~4K token + 4K output + prompt
 
 
 def _post(body: dict) -> dict:
@@ -22,13 +25,15 @@ def _post(body: dict) -> dict:
         return json.load(r)
 
 
-def ollama_runner(model: str, post: Callable[[dict], dict] = _post) -> Callable[[str, str], str]:
+def ollama_runner(model: str, post: Callable[[dict], dict] = _post, think: bool = False,
+                  num_predict: int | None = None) -> Callable[[str, str], str]:
     """Runner cùng giao diện với `llm.claude_runner`: trả chuỗi JSON dạng output `claude -p` để dùng lại `parse_output`."""
 
     def run(system: str, user_input: str) -> str:
         body = {
-            "model": model, "stream": False, "think": False, "format": llm.SCHEMA,
-            "options": {"temperature": 0, "num_ctx": NUM_CTX, "num_predict": MAX_OUTPUT},
+            "model": model, "stream": False, "think": think, "format": llm.SCHEMA,
+            "options": {"temperature": 0, "num_ctx": THINK_NUM_CTX if think else NUM_CTX,
+                        "num_predict": num_predict or (THINK_MAX_OUTPUT if think else MAX_OUTPUT)},
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user_input}],
         }
         try:
@@ -50,9 +55,13 @@ if __name__ == "__main__":
     ap.add_argument("--prompt", default=llm.PROMPT_VERSION)
     ap.add_argument("--gold", choices=["dev", "test", "all"], help="chỉ trích JD trong nửa gold này (gold.dev_test)")
     ap.add_argument("--limit", type=int)
+    ap.add_argument("--think", action="store_true", help="bật chế độ suy nghĩ; kết quả lưu dưới model <model>-think")
+    ap.add_argument("--num-predict", type=int, help="trần token output (gồm phần suy nghĩ), mặc định theo --think")
     args = ap.parse_args()
     system = (llm.PROMPTS / f"{args.prompt}.txt").read_text(encoding="utf-8")
     urls = list(gold.load())
     only = {"all": set(urls), **dict(zip(["dev", "test"], gold.dev_test(urls)))}.get(args.gold)
-    print(dict(llm.extract(db.connect(Path("data/jobs.db")), args.model, args.prompt, system, args.limit,
-                           runner=ollama_runner(args.model), batch=1, only=only)))
+    store_model = f"{args.model}-think" if args.think else args.model  # tách cache/eval khỏi bản không suy nghĩ
+    runner = ollama_runner(args.model, think=args.think, num_predict=args.num_predict)
+    print(dict(llm.extract(db.connect(Path("data/jobs.db")), store_model, args.prompt, system, args.limit,
+                           runner=runner, batch=1, only=only)))

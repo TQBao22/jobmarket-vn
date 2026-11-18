@@ -45,3 +45,18 @@ def test_ollama_runner_connection_failure_becomes_error():
 
     parsed = llm.parse_output(local.ollama_runner("m", post=post)("s", "x"), {"a"})
     assert parsed.error and "connection refused" in parsed.error
+
+
+def test_think_runner_requests_thinking_with_larger_budget():
+    post, calls = fake_post(json.dumps({"results": []}))
+    local.ollama_runner("qwen3:8b", post=post, think=True)("sys", "input")
+    body = calls[0]
+    assert body["think"] is True and body["format"] == llm.SCHEMA
+    assert body["options"]["num_predict"] == local.THINK_MAX_OUTPUT  # phần suy nghĩ tính vào num_predict
+    assert body["options"]["num_ctx"] == local.THINK_NUM_CTX
+
+
+def test_num_predict_override():
+    post, calls = fake_post(json.dumps({"results": []}))
+    local.ollama_runner("m", post=post, think=True, num_predict=8192)("sys", "input")
+    assert calls[0]["options"]["num_predict"] == 8192
