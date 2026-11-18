@@ -46,7 +46,8 @@ flowchart LR
 | `query.py` | truy vấn chỉ đọc dùng chung cho REST và MCP: top kỹ năng, lọc JD, khớp CV (v3) | `sqlite3` |
 | `api/app.py` | REST `/api/*` (hợp đồng: `docs/api.md`), chỉ chạy local (ADR 0004) | FastAPI, `pypdf` |
 | `frontend/` | FE 3 tab: Kỹ năng, Việc làm, Khớp CV; gọi BE qua proxy `/api` | React, TypeScript, Vite |
-| v2: `route/`, `train/` · v3: `mcp/` | thiết kế khi tới giai đoạn | |
+| `mcp/` | MCP server stdio (spec 2026-07-28): 3 tool chỉ đọc `top_skills`, `search_jobs`, `match_skills` gọi `query.py`; cấu hình `.mcp.json`, demo `docs/mcp-demo.md` | stdlib |
+| v2: `route/`, `train/` | thiết kế khi tới giai đoạn | |
 
 Mỗi module chỉ đọc/ghi DB qua `db.py`. Logic thuần (parse, che PII, chuẩn hoá, chấm điểm) tách khỏi I/O để test offline trên `tests/fixtures/`.
 

@@ -120,8 +120,11 @@ def make_tools(today: Callable[[], str] = lambda: datetime.date.today().isoforma
         }, _tool(search_jobs)),
         "match_skills": ({
             "name": "match_skills",
-            "description": "Xếp hạng tin tuyển dụng đang mở theo mức khớp với một bộ kỹ năng; kỹ năng hiếm có trọng số cao hơn. "
-                           "Trả matches [{url, title, company, score 0–1, matched, missing}].",
+            "description": "Xếp hạng tin tuyển dụng đang mở theo mức khớp với một bộ kỹ năng. Trả matches [{url, title, company, "
+                           "score, matched, missing}], đã sắp theo score giảm dần: phần tử đầu là tin hợp nhất. "
+                           "score (0–1) = phần trọng số kỹ năng của tin mà ứng viên đã có; kỹ năng hiếm có trọng số cao hơn, "
+                           "nên tin yêu cầu nhiều kỹ năng mà ứng viên chỉ có vài cái sẽ có score thấp. "
+                           "missing = đúng các kỹ năng tin đó yêu cầu mà ứng viên chưa có, sắp theo trọng số giảm dần.",
             "inputSchema": {"type": "object", "required": ["skills"], "properties": {
                 "skills": {"type": "array", "items": {"type": "string"}, "description": "Kỹ năng của ứng viên"},
                 "top_k": {**limit, "default": 10}}},
