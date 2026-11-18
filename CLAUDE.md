@@ -39,7 +39,7 @@ eval/                     # chấm điểm, RESULTS.md (chỉ thêm dòng, khôn
 data/raw/  data/gold/     # HTML gốc · nhãn tay
 app.py                    # Streamlit (dashboard công khai)
 src/jobmarket/api/        # v3 · FastAPI (local)
-web/                      # v3 · React + TypeScript (local)
+frontend/                 # v3 · React + TypeScript (local)
 tests/fixtures/           # HTML mẫu cho test parser
 docs/adr/  docs/research/ # quyết định · ghi chú nghiên cứu
 ```
@@ -48,11 +48,11 @@ docs/adr/  docs/research/ # quyết định · ghi chú nghiên cứu
 
 ```powershell
 python -m venv .venv; .venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 python -m pytest
 streamlit run app.py
 scripts\run_local.ps1                      # BE FastAPI :8000 + FE React :5173 + Ollama (v3, local)
-cd web; npm install; npm test; npm run build
+cd frontend; npm install; npm test; npm run build
 docker build -t jobmarket-vn . ; docker run -p 8501:8501 jobmarket-vn   # dashboard trong container
 ```
 

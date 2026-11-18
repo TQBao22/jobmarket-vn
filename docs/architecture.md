@@ -45,7 +45,7 @@ flowchart LR
 | `extract/local.py` | trích bằng model mở qua Ollama, cùng prompt/schema/cache với Claude (v2) | Ollama |
 | `query.py` | truy vấn chỉ đọc dùng chung cho REST và MCP: top kỹ năng, lọc JD, khớp CV (v3) | `sqlite3` |
 | `api/app.py` | REST `/api/*` (hợp đồng: `docs/api.md`), chỉ chạy local (ADR 0004) | FastAPI, `pypdf` |
-| `web/` | FE 3 tab: Kỹ năng, Việc làm, Khớp CV; gọi BE qua proxy `/api` | React, TypeScript, Vite |
+| `frontend/` | FE 3 tab: Kỹ năng, Việc làm, Khớp CV; gọi BE qua proxy `/api` | React, TypeScript, Vite |
 | v2: `route/`, `train/` · v3: `mcp/` | thiết kế khi tới giai đoạn | |
 
 Mỗi module chỉ đọc/ghi DB qua `db.py`. Logic thuần (parse, che PII, chuẩn hoá, chấm điểm) tách khỏi I/O để test offline trên `tests/fixtures/`.
