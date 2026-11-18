@@ -42,9 +42,16 @@ flowchart LR
 | `gold.py` | chọn 40 JD gold, đọc nhãn | stdlib |
 | `evaluate.py` | P/R/F1 micro trên gold set, ghi `eval/RESULTS.md` | stdlib |
 | `app.py` | dashboard | Streamlit |
+| `extract/local.py` | trích bằng model mở qua Ollama, cùng prompt/schema/cache với Claude (v2) | Ollama |
+| `query.py` | truy vấn chỉ đọc dùng chung cho REST và MCP: top kỹ năng, lọc JD, khớp CV (v3) | `sqlite3` |
+| `api/app.py` | REST `/api/*` (hợp đồng: `docs/api.md`), chỉ chạy local (ADR 0004) | FastAPI, `pypdf` |
+| `web/` | FE 3 tab: Kỹ năng, Việc làm, Khớp CV; gọi BE qua proxy `/api` | React, TypeScript, Vite |
 | v2: `route/`, `train/` · v3: `mcp/` | thiết kế khi tới giai đoạn | |
 
 Mỗi module chỉ đọc/ghi DB qua `db.py`. Logic thuần (parse, che PII, chuẩn hoá, chấm điểm) tách khỏi I/O để test offline trên `tests/fixtures/`.
+
+## Chạy local (v3)
+`scripts/run_local.ps1` mở Ollama `:11434`, BE `:8000`, FE `:5173`. CV upload chỉ xử lý trong bộ nhớ BE, không lưu. Không deploy BE/FE; dashboard Streamlit công khai vẫn đọc CSV.
 
 ## Lưu trữ: `data/jobs.db`
 

@@ -9,13 +9,13 @@ Kiến trúc, bảng DB, quyết định thiết kế: `docs/architecture.md`. C
 
 ## Lộ trình và tiêu chí xong
 
-Làm tuần tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt tiêu chí. Ngoại lệ người dùng đã duyệt: phần FastAPI + FE của v3 làm song song v2 (nhánh riêng, merge sau v2). Đề xuất ngoài lộ trình (upload CV, multi-agent...) thì hỏi người dùng trước.
+Làm tuần tự; giai đoạn sau chỉ bắt đầu khi giai đoạn trước đạt tiêu chí. Ngoại lệ người dùng đã duyệt: phần FastAPI + FE của v3 làm song song v2 (nhánh riêng, merge sau v2). Đề xuất ngoài lộ trình (multi-agent...) thì hỏi người dùng trước.
 
 | Giai đoạn | Nội dung | Xong khi |
 |---|---|---|
 | **v1 — Pipeline + eval** | Crawl ITviec, lọc PII, LLM trích kỹ năng, chuẩn hoá tên kỹ năng, dashboard | Toàn bộ JD AI/Data đang mở trên ITviec trong DB (ADR 0002) · gold set 40 JD (AI gán + AI duyệt, 2 người duyệt; hạn chế ghi trong `docs/pipeline.md`) · F1 ghi trong `eval/RESULTS.md` · dashboard có URL công khai |
 | **v2 — Model nhỏ + routing + cache** | Fine-tune Qwen3-1.7B (QLoRA) từ nhãn của model mở Qwen3-8B, không từ output Claude (ADR 0003); router: JD dễ → model local, khó/không chắc → Claude Haiku; cache JD trùng | So sánh 3 cấu hình (chỉ Claude / chỉ local / routing) theo F1, chi phí quy đổi trên 1.000 JD, độ trễ — ghi trong `eval/RESULTS.md` |
-| **v3 — MCP server tự viết** | JSON-RPC thuần, không dùng SDK, cho agent truy vấn DB JD chỉ đọc | Claude Code kết nối được · ≥3 tool · mỗi tool có test · trả lời đúng 5 câu hỏi mẫu trong `docs/mcp-demo.md` |
+| **v3 — MCP server tự viết + FastAPI** | Một lớp truy vấn DB JD chỉ đọc, mở 2 cổng: MCP (JSON-RPC thuần, không dùng SDK) cho agent và REST (FastAPI) cho ứng dụng. Khớp CV ↔ JD (`match_cv`: kỹ năng CV trích bằng model local qua Ollama, xếp hạng JD đang mở + kỹ năng còn thiếu): chỉ chạy trên máy cá nhân, không công khai, CV không lưu | Claude Code kết nối được · ≥3 tool MCP và endpoint REST tương ứng dùng chung hàm truy vấn · mỗi tool/endpoint có test · trả lời đúng 5 câu hỏi mẫu trong `docs/mcp-demo.md` |
 | **v4 — Bài viết** | 1–2 bài phân tích: kiến trúc, eval, chi phí trên mỗi JD | Mọi con số trích từ `eval/RESULTS.md` |
 
 ## Stack
@@ -37,7 +37,9 @@ train/                    # v2 · script fine-tune
 scripts/                  # tác vụ định kỳ (crawl hàng tuần)
 eval/                     # chấm điểm, RESULTS.md (chỉ thêm dòng, không sửa dòng cũ)
 data/raw/  data/gold/     # HTML gốc · nhãn tay
-app.py                    # Streamlit
+app.py                    # Streamlit (dashboard công khai)
+src/jobmarket/api/        # v3 · FastAPI (local)
+web/                      # v3 · React + TypeScript (local)
 tests/fixtures/           # HTML mẫu cho test parser
 docs/adr/  docs/research/ # quyết định · ghi chú nghiên cứu
 ```
@@ -49,6 +51,8 @@ python -m venv .venv; .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 python -m pytest
 streamlit run app.py
+scripts\run_local.ps1                      # BE FastAPI :8000 + FE React :5173 + Ollama (v3, local)
+cd web; npm install; npm test; npm run build
 docker build -t jobmarket-vn . ; docker run -p 8501:8501 jobmarket-vn   # dashboard trong container
 ```
 

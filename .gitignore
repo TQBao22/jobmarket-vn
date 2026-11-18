@@ -9,3 +9,6 @@ data/jobs.db
 tests/fixtures/itviec/
 context.txt
 data/logs/
+
+web/node_modules/
+web/dist/
