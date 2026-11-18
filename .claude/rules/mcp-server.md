@@ -11,6 +11,6 @@ paths:
 - Kết nối DB ở chế độ chỉ đọc (`sqlite3.connect("file:...?mode=ro", uri=True)`).
 - Tool nhận tham số có kiểu, SQL dùng tham số ràng buộc (`?`); không nhận SQL thô từ agent.
 - Mỗi tool giới hạn số dòng trả về (mặc định 50).
-- Lỗi giao thức (JSON hỏng, method/tool không có, tham số sai kiểu) → lỗi JSON-RPC có `code` + `message`. Lỗi khi tool chạy (vd. tháng không có dữ liệu) → `result` với `isError: true` + thông báo tiếng Việt, để model đọc và thử lại. Sau mọi lỗi server chạy tiếp.
+- Lỗi giao thức (JSON hỏng, method không có, tool không có, `arguments` không phải object, thiếu `_meta`) → lỗi JSON-RPC có `code` + `message`. Tham số tool sai kiểu/giá trị và lỗi khi tool chạy (vd. tháng không có dữ liệu, thiếu DB) → `result` với `isError: true` + thông báo tiếng Việt, để model đọc và gọi lại (spec SEP-1303, `docs/research/mcp-spec.md` mục 4). Sau mọi lỗi server chạy tiếp.
 - stdout chỉ dành cho message JSON-RPC; log ghi ra stderr.
 - Mỗi tool có test gửi request JSON-RPC và kiểm tra response, không cần Claude Code.

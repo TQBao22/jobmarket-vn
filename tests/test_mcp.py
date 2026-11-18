@@ -178,3 +178,16 @@ def test_stdio_roundtrip_utf8(db_tools):
     lines = p.stdout.splitlines()
     assert len(lines) == 2 and "Traceback" not in p.stderr  # notification không có dòng trả lời
     assert "tháng" in json.loads(lines[1])["result"]["content"][0]["text"]  # tiếng Việt qua stdout nguyên vẹn
+
+
+def test_deeply_nested_json_is_parse_error_not_crash():
+    assert call("[" * 100000)["error"]["code"] == -32700
+
+
+def test_invalid_utf8_on_stdin_does_not_kill_server():
+    env = {**os.environ, "PYTHONPATH": "src"}
+    good = json.dumps(req("server/discover", id_=2)).encode()
+    p = subprocess.run([sys.executable, "-m", "jobmarket.mcp"], input=b"\xff\xfe\n" + good + b"\n",
+                       capture_output=True, env=env, timeout=30)
+    assert b"Traceback" not in p.stderr
+    assert json.loads(p.stdout.decode("utf-8").splitlines()[-1])["id"] == 2  # vẫn trả lời request sau dòng hỏng

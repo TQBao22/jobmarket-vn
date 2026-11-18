@@ -64,7 +64,7 @@ def _dispatch(method: str, params: dict, tools: dict[str, Tool]) -> dict:
 def handle(line: str, tools: dict[str, Tool]) -> str | None:
     try:
         msg = json.loads(line)
-    except ValueError:
+    except (ValueError, RecursionError):  # JSON lồng quá sâu ném RecursionError, không phải ValueError
         return _error({}, PARSE_ERROR, "JSON không hợp lệ")
     if not isinstance(msg, dict):
         return _error({}, INVALID_REQUEST, "Message phải là object JSON-RPC")
@@ -88,7 +88,7 @@ def handle(line: str, tools: dict[str, Tool]) -> str | None:
 
 def main(tools: dict[str, Tool]) -> None:
     sys.stdout.reconfigure(encoding="utf-8")  # console Windows mặc định cp1252, không in được tiếng Việt
-    sys.stdin.reconfigure(encoding="utf-8")
+    sys.stdin.reconfigure(encoding="utf-8", errors="replace")  # byte hỏng → dòng đó lỗi parse, server chạy tiếp
     for line in sys.stdin:  # hết stdin → thoát (spec: SHOULD exit promptly)
         if not line.strip():
             continue
