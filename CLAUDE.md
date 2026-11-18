@@ -3,7 +3,7 @@
 Crawl JD (tin tuyển dụng) AI/Data ở Việt Nam → LLM trích kỹ năng ra JSON → chuẩn hoá tên kỹ năng → dashboard xu hướng.
 Project portfolio cá nhân: giá trị nằm ở **chất lượng đo được** và **lý do của mỗi quyết định kiến trúc**, không ở số tính năng.
 
-**Đang ở:** v2 bắt đầu (2026-11-17). v1 xong: 128 JD AI/Data trên ITviec, gold 40 JD (2 người duyệt), LLM F1 0,852 vs thẻ ITviec 0,238, dashboard https://jobmarket-vn-tndk7vgqeiu5zqkfkxpwrw.streamlit.app/. Crawl ITviec tự động mỗi Chủ nhật 20:00 (`scripts/crawl_weekly.ps1`). v2 theo ADR 0003 (không train trên output Claude). Mốc zero-shot, F1 trên 40 JD: Qwen3-1.7B 0,428, Qwen3-8B 0,599. Gold đã chia dev/test 20/20: chọn cấu hình bằng dev, test chấm một lần khi chốt. Tiếp theo: nâng teacher 8B trên dev (thử `think`) rồi sinh nhãn JD ngoài gold. Cập nhật dòng này khi chuyển giai đoạn.
+**Đang ở:** v2 bắt đầu (2026-11-17). v1 xong: 128 JD AI/Data trên ITviec, gold 40 JD (2 người duyệt), LLM F1 0,852 vs thẻ ITviec 0,238, dashboard https://jobmarket-vn-tndk7vgqeiu5zqkfkxpwrw.streamlit.app/. Crawl ITviec tự động mỗi Chủ nhật 20:00 (`scripts/crawl_weekly.ps1`). v2 theo ADR 0003 (không train trên output Claude). Mốc zero-shot, F1 trên 40 JD: Qwen3-1.7B 0,428, Qwen3-8B 0,599. Gold đã chia dev/test 20/20: chọn cấu hình bằng dev, test chấm một lần khi chốt. v3 đạt tiêu chí (2026-11-18): MCP server tự viết 3 tool, Claude Code trả đúng 5/5 câu `docs/mcp-demo.md`. Tiếp theo: nâng teacher 8B trên dev (thử `think`) rồi sinh nhãn JD ngoài gold. Cập nhật dòng này khi chuyển giai đoạn.
 
 Kiến trúc, bảng DB, quyết định thiết kế: `docs/architecture.md`. Các bước, đầu vào/đầu ra, trạng thái từng bước: `docs/pipeline.md`. Thuật ngữ: `GLOSSARY.md`.
 
@@ -52,6 +52,7 @@ pip install -r requirements-dev.txt
 python -m pytest
 streamlit run app.py
 scripts\run_local.ps1                      # BE FastAPI :8000 + FE React :5173 + Ollama (v3, local)
+$env:PYTHONPATH="src"; python -m jobmarket.mcp   # MCP server stdio; Claude Code tự chạy qua .mcp.json
 cd frontend; npm install; npm test; npm run build
 docker build -t jobmarket-vn . ; docker run -p 8501:8501 jobmarket-vn   # dashboard trong container
 ```

@@ -80,5 +80,5 @@ scripts/            crawl hằng tuần, chạy bản local
 
 - [x] v1: crawl, che thông tin cá nhân, trích kỹ năng bằng LLM, chuẩn hoá, gold set, dashboard
 - [ ] v2: fine-tune Qwen3-1.7B (QLoRA) từ nhãn của Qwen3-8B; router gửi tin dễ cho model local, tin khó cho Claude; cache tin trùng. So 3 cấu hình theo F1, chi phí, độ trễ
-- [ ] v3: MCP server tự viết cho agent truy vấn dữ liệu; API + giao diện local (đã có bản đầu)
+- [x] v3: MCP server tự viết (JSON-RPC thuần, spec 2026-07-28) cho agent truy vấn dữ liệu, Claude Code trả đúng 5/5 câu hỏi mẫu ([`docs/mcp-demo.md`](docs/mcp-demo.md)); API + giao diện local
 - [ ] v4: bài viết về kiến trúc, cách đo và chi phí
