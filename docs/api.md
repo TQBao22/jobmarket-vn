@@ -52,7 +52,7 @@ Mọi dữ liệu kỹ năng đều đã chuẩn hoá bằng `normalize/aliases.
 }
 ```
 - Trích kỹ năng CV bằng model local qua Ollama (`extract/local.py`, prompt `extract/prompts/cv_v2.txt`), rồi chuẩn hoá.
-- `evidence`: `used` = kỹ năng có trong mô tả project hoặc công việc đã làm, `quote` là câu trích nguyên văn từ CV; `listed` = chỉ có ở mục kỹ năng, học vấn, chứng chỉ, `quote` rỗng. Câu trích không tìm thấy trong CV (so sau khi gộp khoảng trắng, không phân biệt hoa thường) bị hạ về `listed`. Hai mục cùng tên chuẩn gộp làm một, `used` thắng.
+- `evidence`: `used` = kỹ năng có trong mô tả project hoặc công việc đã làm, `quote` là câu trích nguyên văn từ CV; `listed` = chỉ có ở mục kỹ năng, học vấn, chứng chỉ, `quote` rỗng. Câu trích không tìm thấy trong CV, hoặc không chứa tên kỹ năng, bị hạ về `listed` (so sau khi gộp khoảng trắng, không phân biệt hoa thường). Hai mục cùng tên chuẩn gộp làm một, `used` thắng.
 - Chỉ xét JD đang mở. `score` = tổng trọng số kỹ năng JD có trong CV / tổng trọng số mọi kỹ năng của JD; trọng số kỹ năng `s` = `ln(N / df(s)) + 1` (N = số JD đang mở, df = số JD đang mở có `s`), nên kỹ năng hiếm nặng hơn Python. Kỹ năng CV `listed` khớp được tính 0,5 trọng số (`query.LISTED_FACTOR`, chọn tay, chưa có bộ CV có đáp án để đo). JD không có kỹ năng nào bị bỏ qua.
 - `matched`, `missing`: tên chuẩn, sắp theo trọng số giảm dần. Sắp `matches` theo `score` giảm dần.
 - CV và câu trích chỉ xử lý trong bộ nhớ: không ghi file, DB hay log; không lưu vào `llm_calls`.

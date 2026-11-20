@@ -171,3 +171,13 @@ def test_listed_lowers_score(client):
         {"name": "Python", "evidence": "listed", "quote": ""}, "SQL"])
     b = next(m for m in r.json()["matches"] if m["title"] == "b")
     assert 0 < b["score"] < 1.0 and b["matched"] == ["SQL", "Python"]
+
+
+def test_cv_quote_without_skill_name_downgraded(client):
+    # đo thật 2026-11-20: qwen3:8b gắn Spark `used` với câu trích có trong CV nhưng không nhắc Spark
+    r = _match_cv(client, "Kỹ năng: Spark. Viết pipeline ETL với Apache Airflow", [
+        {"name": "Spark", "evidence": "used", "quote": "Viết pipeline ETL với Apache Airflow"},
+        {"name": "Apache Airflow", "evidence": "used", "quote": "Viết pipeline ETL với Apache Airflow"},
+    ])
+    assert r.json()["cv_skills"] == [{"skill": "Spark", "evidence": "listed", "quote": ""},
+                                     {"skill": "Airflow", "evidence": "used", "quote": "Viết pipeline ETL với Apache Airflow"}]

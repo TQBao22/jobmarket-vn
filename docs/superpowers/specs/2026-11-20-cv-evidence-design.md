@@ -27,3 +27,4 @@ Khi khớp CV ↔ JD, kỹ năng có bằng chứng trong project/kinh nghiệm 
 - Hệ số 0,5 cho `listed`: chọn tay, không đo được; ghi trong `docs/api.md`.
 - Câu trích không tìm thấy trong CV (so sau khi gộp khoảng trắng, không phân biệt hoa thường) → hạ về `listed`, bỏ câu trích: bằng chứng phải kiểm được, không tin model bịa.
 - Hai mục chuẩn hoá về cùng tên → gộp, `used` thắng.
+- (Thêm khi chạy thật 2026-11-20) Câu trích phải chứa tên kỹ năng: qwen3:8b gắn Spark `used` với câu trích có trong CV nhưng không nhắc Spark. Cái giá: kỹ năng model dịch sang tiếng Anh ("học máy" → Machine Learning) bị hạ về `listed`.

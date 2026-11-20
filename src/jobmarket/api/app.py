@@ -128,7 +128,7 @@ def _fold(text: str) -> str:
 
 
 def _cv_skills(out: str, text: str) -> list[dict] | None:
-    """Output runner → [{skill, evidence, quote}]; None nếu output hỏng. Câu trích không có trong CV → hạ về `listed`."""
+    """Output runner → [{skill, evidence, quote}]; None nếu output hỏng. Câu trích không có trong CV hoặc không nhắc kỹ năng → hạ về `listed`."""
     try:
         cv = _Cv.model_validate(json.loads(out)["structured_output"])
     except (json.JSONDecodeError, KeyError, TypeError, ValidationError):
@@ -138,8 +138,10 @@ def _cv_skills(out: str, text: str) -> list[dict] | None:
         if not item.name.strip():
             continue
         quote = " ".join(item.quote.split())
-        used = item.evidence == "used" and bool(quote) and _fold(quote) in folded
         skill = normalize(item.name, table)
+        # bằng chứng phải kiểm được: câu trích có trong CV và nhắc tới kỹ năng (tên model trả hoặc tên chuẩn)
+        used = (item.evidence == "used" and _fold(quote) in folded
+                and any(_fold(n) in _fold(quote) for n in (item.name, skill)))
         prev = merged.get(skill.casefold())
         if prev is None or (used and prev["evidence"] == "listed"):  # cùng tên chuẩn: `used` thắng
             merged[skill.casefold()] = {"skill": skill, "evidence": "used" if used else "listed", "quote": quote if used else ""}
