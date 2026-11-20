@@ -37,9 +37,9 @@ def _blank_pdf():
 
 
 def _runner_returning(skills):
-    """skills: tên (→ `used`, câu trích = chính tên) hoặc dict đầy đủ {name, evidence, quote}."""
+    """skills: tên (→ `used`, câu trích = "dùng <tên>") hoặc dict đầy đủ {name, evidence, quote}."""
     seen = []
-    items = [s if isinstance(s, dict) else {"name": s, "evidence": "used", "quote": s} for s in skills]
+    items = [s if isinstance(s, dict) else {"name": s, "evidence": "used", "quote": f"dùng {s}"} for s in skills]
 
     def run(system, user_input):
         seen.append(user_input)
@@ -89,11 +89,11 @@ def test_jobs_filter(client):
 
 
 def test_match_txt(client):
-    r = client.post("/api/match", files={"file": ("cv.txt", "Dự án: dùng Python và SQL".encode(), "text/plain")}, data={"top_k": "1"})
+    r = client.post("/api/match", files={"file": ("cv.txt", "Dự án: dùng Python, dùng SQL".encode(), "text/plain")}, data={"top_k": "1"})
     body = r.json()
     assert r.status_code == 200 and body["model"] == "qwen3:8b"
-    assert body["cv_skills"] == [{"skill": "Python", "evidence": "used", "quote": "Python"},
-                                 {"skill": "SQL", "evidence": "used", "quote": "SQL"}]
+    assert body["cv_skills"] == [{"skill": "Python", "evidence": "used", "quote": "dùng Python"},
+                                 {"skill": "SQL", "evidence": "used", "quote": "dùng SQL"}]
     assert len(body["matches"]) == 1 and body["matches"][0]["title"] == "b" and body["matches"][0]["score"] == 1.0
 
 
@@ -181,3 +181,19 @@ def test_cv_quote_without_skill_name_downgraded(client):
     ])
     assert r.json()["cv_skills"] == [{"skill": "Spark", "evidence": "listed", "quote": ""},
                                      {"skill": "Airflow", "evidence": "used", "quote": "Viết pipeline ETL với Apache Airflow"}]
+
+
+def test_cv_quote_must_name_skill_as_whole_word(client):
+    r = _match_cv(client, "Kỹ năng: R, Java. Dự án: xây dashboard bằng JavaScript", [
+        {"name": "R", "evidence": "used", "quote": "xây dashboard"},  # "dashboard" chứa chữ r
+        {"name": "Java", "evidence": "used", "quote": "bằng JavaScript"},
+        {"name": "JavaScript", "evidence": "used", "quote": "bằng JavaScript"},
+    ])
+    assert [(s["skill"], s["evidence"]) for s in r.json()["cv_skills"]] == [
+        ("R", "listed"), ("Java", "listed"), ("JavaScript", "used")]
+
+
+def test_cv_quote_only_skill_name_is_not_evidence(client):
+    # câu trích chỉ là tên kỹ năng (vd. lấy từ mục Kỹ năng) không chứng minh đã dùng trong project
+    r = _match_cv(client, "Kỹ năng: R, Python", [{"name": "R", "evidence": "used", "quote": "R"}])
+    assert r.json()["cv_skills"] == [{"skill": "R", "evidence": "listed", "quote": ""}]

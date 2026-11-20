@@ -4,6 +4,7 @@ CV chỉ nằm trong bộ nhớ của request: không ghi file, DB hay log.
 """
 import datetime
 import json
+import re
 import io
 import os
 import sqlite3
@@ -127,6 +128,11 @@ def _fold(text: str) -> str:
     return " ".join(text.split()).casefold()
 
 
+def _has_word(needle: str, text: str) -> bool:
+    """`needle` xuất hiện trọn từ trong `text` (đã _fold): `R` không khớp "dashboard", `Java` không khớp "JavaScript"."""
+    return bool(needle) and re.search(rf"(?<!\w){re.escape(needle)}(?!\w)", text) is not None
+
+
 def _cv_skills(out: str, text: str) -> list[dict] | None:
     """Output runner → [{skill, evidence, quote}]; None nếu output hỏng. Câu trích không có trong CV hoặc không nhắc kỹ năng → hạ về `listed`."""
     try:
@@ -140,8 +146,10 @@ def _cv_skills(out: str, text: str) -> list[dict] | None:
         quote = " ".join(item.quote.split())
         skill = normalize(item.name, table)
         # bằng chứng phải kiểm được: câu trích có trong CV và nhắc tới kỹ năng (tên model trả hoặc tên chuẩn)
-        used = (item.evidence == "used" and _fold(quote) in folded
-                and any(_fold(n) in _fold(quote) for n in (item.name, skill)))
+        # câu trích chỉ gồm tên kỹ năng (vd. lấy từ mục Kỹ năng) không chứng minh đã dùng
+        names = [_fold(n) for n in (item.name, skill)]
+        used = (item.evidence == "used" and _has_word(_fold(quote), folded) and _fold(quote) not in names
+                and any(_has_word(n, _fold(quote)) for n in names))
         prev = merged.get(skill.casefold())
         if prev is None or (used and prev["evidence"] == "listed"):  # cùng tên chuẩn: `used` thắng
             merged[skill.casefold()] = {"skill": skill, "evidence": "used" if used else "listed", "quote": quote if used else ""}
