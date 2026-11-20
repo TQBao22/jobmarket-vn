@@ -45,3 +45,10 @@ def test_ollama_runner_connection_failure_becomes_error():
 
     parsed = llm.parse_output(local.ollama_runner("m", post=post)("s", "x"), {"a"})
     assert parsed.error and "connection refused" in parsed.error
+
+
+def test_runner_custom_schema_and_budget():
+    post, calls = fake_post(json.dumps({"skills": []}))
+    schema = {"type": "object", "properties": {"skills": {"type": "array"}}}
+    local.ollama_runner("m", post=post, schema=schema, num_predict=2048)("s", "u")
+    assert calls[0]["format"] == schema and calls[0]["options"]["num_predict"] == 2048

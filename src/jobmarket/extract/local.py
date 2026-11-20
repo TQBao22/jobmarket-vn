@@ -22,13 +22,14 @@ def _post(body: dict) -> dict:
         return json.load(r)
 
 
-def ollama_runner(model: str, post: Callable[[dict], dict] = _post) -> Callable[[str, str], str]:
+def ollama_runner(model: str, post: Callable[[dict], dict] = _post, schema: dict = llm.SCHEMA,
+                  num_predict: int = MAX_OUTPUT) -> Callable[[str, str], str]:
     """Runner cùng giao diện với `llm.claude_runner`: trả chuỗi JSON dạng output `claude -p` để dùng lại `parse_output`."""
 
     def run(system: str, user_input: str) -> str:
         body = {
-            "model": model, "stream": False, "think": False, "format": llm.SCHEMA,
-            "options": {"temperature": 0, "num_ctx": NUM_CTX, "num_predict": MAX_OUTPUT},
+            "model": model, "stream": False, "think": False, "format": schema,
+            "options": {"temperature": 0, "num_ctx": NUM_CTX, "num_predict": num_predict},
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user_input}],
         }
         try:
