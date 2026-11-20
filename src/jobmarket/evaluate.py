@@ -40,10 +40,13 @@ def _per_jd(labels: dict[str, list[str] | None], preds: dict[str, list[str]], ta
     return out
 
 
-def _f1(jds: list[dict]) -> float:
+def _prf(jds: list[dict]) -> tuple[float, float, float]:
+    """Precision, recall, F1 micro của một tập JD."""
     tp = sum(d["tp"] for d in jds)
-    wrong = sum(len(d["missed"]) + len(d["extra"]) for d in jds)
-    return 2 * tp / (2 * tp + wrong) if tp else 0.0
+    fp, fn = sum(len(d["extra"]) for d in jds), sum(len(d["missed"]) for d in jds)
+    p = tp / (tp + fp) if tp + fp else 0.0
+    r = tp / (tp + fn) if tp + fn else 0.0
+    return p, r, 2 * p * r / (p + r) if p + r else 0.0
 
 
 def _ci(stat: Callable[[list[int]], float], n: int) -> tuple[float, float]:
@@ -56,14 +59,12 @@ def _ci(stat: Callable[[list[int]], float], n: int) -> tuple[float, float]:
 def score(labels: dict[str, list[str] | None], preds: dict[str, list[str]], table) -> dict:
     """P, R, F1 micro, so khớp không phân biệt hoa thường sau chuẩn hoá; `f1_ci`: khoảng tin cậy 95% bootstrap theo JD."""
     jds = _per_jd(labels, preds, table)
-    tp = sum(d["tp"] for d in jds)
-    fp, fn = sum(len(d["extra"]) for d in jds), sum(len(d["missed"]) for d in jds)
-    prec = tp / (tp + fp) if tp + fp else 0.0
-    rec = tp / (tp + fn) if tp + fn else 0.0
+    prec, rec, f1 = _prf(jds)
     return {
-        "p": prec, "r": rec, "f1": 2 * prec * rec / (prec + rec) if prec + rec else 0.0,
-        "f1_ci": _ci(lambda idx: _f1([jds[i] for i in idx]), len(jds)) if jds else (0.0, 0.0),
-        "tp": tp, "fp": fp, "fn": fn, "n_jd": len(jds),
+        "p": prec, "r": rec, "f1": f1,
+        "f1_ci": _ci(lambda idx: _prf([jds[i] for i in idx])[2], len(jds)) if jds else (0.0, 0.0),
+        "tp": sum(d["tp"] for d in jds), "fp": sum(len(d["extra"]) for d in jds), "fn": sum(len(d["missed"]) for d in jds),
+        "n_jd": len(jds),
         "missing_pred": sum(d["url"] not in preds for d in jds),
         "worst": [{k: d[k] for k in ("url", "missed", "extra")}
                   for d in sorted(jds, key=lambda d: -(len(d["missed"]) + len(d["extra"])))[:5]],
@@ -71,12 +72,15 @@ def score(labels: dict[str, list[str] | None], preds: dict[str, list[str]], tabl
 
 
 def compare(labels: dict[str, list[str] | None], preds_a: dict[str, list[str]], preds_b: dict[str, list[str]], table) -> dict:
-    """F1(A) − F1(B) trên cùng các JD, khoảng tin cậy 95% bootstrap ghép cặp (mỗi lần lấy mẫu dùng chung JD cho A và B)."""
+    """A − B cho P, R, F1 trên cùng các JD: {"p"|"r"|"f1": (hiệu, khoảng tin cậy 95%)}.
+    Bootstrap ghép cặp: mỗi lần lấy mẫu dùng chung một bộ JD cho A và B (seed cố định nên ba chỉ số cũng chung mẫu)."""
     a, b = _per_jd(labels, preds_a, table), _per_jd(labels, preds_b, table)
-
-    def diff(idx):
-        return _f1([a[i] for i in idx]) - _f1([b[i] for i in idx])
-    return {"diff": diff(range(len(a))), "ci": _ci(diff, len(a)) if a else (0.0, 0.0)}
+    out = {}
+    for k, name in enumerate(("p", "r", "f1")):
+        def diff(idx, k=k):
+            return _prf([a[i] for i in idx])[k] - _prf([b[i] for i in idx])[k]
+        out[name] = (diff(range(len(a))), _ci(diff, len(a)) if a else (0.0, 0.0))
+    return out
 
 
 def _cost_and_latency(conn, model: str, prompt: str) -> tuple[str, str]:
@@ -136,7 +140,8 @@ if __name__ == "__main__":
     note = f"{r['n_jd']} JD gold ({args.split}). {args.note}".strip()
     if args.vs:
         c = compare(labels, preds, _preds(conn, jobs, args.vs, args.prompt), load_aliases())
-        vs = f"ΔF1 so với {args.vs} trên cùng JD: {c['diff']:+.3f} (KTC95% {c['ci'][0]:+.3f}…{c['ci'][1]:+.3f})."
+        vs = f"So với {args.vs} trên cùng JD (KTC95% bootstrap ghép cặp): " + ", ".join(
+            f"Δ{m.upper()} {d:+.3f} ({lo:+.3f}…{hi:+.3f})" for m, (d, (lo, hi)) in c.items()) + "."
         print(vs)
         note = f"{note} {vs}"
     row = (f"| {datetime.date.today()} | {config} | {model} | {prompt} | {r['p']:.3f} | {r['r']:.3f} | {r['f1']:.3f} ({lo:.3f}–{hi:.3f}) "

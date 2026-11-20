@@ -82,18 +82,19 @@ def test_compare_identical_predictions_gives_zero_difference():
     labels = _labels(10)
     preds = {u: ["Python"] if i % 3 else ["SQL", "Go"] for i, u in enumerate(labels)}
     c = compare(labels, preds, preds, {})
-    assert c["diff"] == 0 and c["ci"] == (0, 0)
+    assert all(c[m] == (0, (0, 0)) for m in ("p", "r", "f1"))
 
 
 def test_compare_clear_gap_excludes_zero_but_gap_from_few_jd_does_not():
     labels = _labels(20)
     weak = {u: ["Python"] for u in labels}
-    assert compare(labels, labels, weak, {})["ci"][0] > 0
+    clear = compare(labels, labels, weak, {})
+    assert clear["f1"][1][0] > 0 and clear["r"][1][0] > 0 and clear["p"] == (0, (0, 0))  # weak đoán đúng hết cái nó đoán
     # A đúng hết ở 2 JD, B đúng hết ở 1 JD, còn lại như nhau: A hơn trên toàn tập nhưng chưa đủ để kết luận
     a = {u: list(labels[u]) if i in (0, 1) else ["Python"] for i, u in enumerate(labels)}
     b = {u: list(labels[u]) if i == 2 else ["Python"] for i, u in enumerate(labels)}
-    c = compare(labels, a, b, {})
-    assert c["diff"] > 0 and c["ci"][0] <= 0 < c["ci"][1]
+    diff, (lo, hi) = compare(labels, a, b, {})["f1"]
+    assert diff > 0 and lo <= 0 < hi
 
 
 def test_cost_and_latency_per_jd_and_counts_failed_calls(tmp_path):
