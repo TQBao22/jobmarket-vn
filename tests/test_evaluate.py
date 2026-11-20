@@ -109,3 +109,10 @@ def test_cost_and_latency_without_successful_calls(tmp_path):
     conn = db.connect(tmp_path / "t.db")
     db.save_call(conn, {"model": "m", "prompt_version": "v1", "n_jd": 0, "cost_usd": 0, "latency_ms": 5, "error": "x"})
     assert _cost_and_latency(conn, "m", "v1") == ("—", "—")
+
+
+def test_cost_and_latency_short_failures_in_seconds(tmp_path):
+    conn = db.connect(tmp_path / "t.db")
+    for n, ms, err in [(1, 7_000, None), (0, 20_000, "json cắt")]:
+        db.save_call(conn, {"model": "m", "prompt_version": "v1", "n_jd": n, "cost_usd": 0, "latency_ms": ms, "error": err})
+    assert _cost_and_latency(conn, "m", "v1")[1] == "7.0s/JD; 1 lần lỗi (20 s)"

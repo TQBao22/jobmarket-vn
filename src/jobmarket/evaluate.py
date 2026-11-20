@@ -90,7 +90,9 @@ def _cost_and_latency(conn, model: str, prompt: str) -> tuple[str, str]:
     if not n or not ok:
         return "—", "—"
     failed = [r[2] for r in rows if r[3] is not None or not r[1]]
-    latency = f"{statistics.median(ok) / 1000:.1f}s/JD" + (f"; {len(failed)} lần lỗi ({sum(failed) / 60000:.0f} phút)" if failed else "")
+    lost = sum(failed) / 1000
+    lost_txt = f"{lost / 60:.0f} phút" if lost >= 60 else f"{lost:.0f} s"
+    latency = f"{statistics.median(ok) / 1000:.1f}s/JD" + (f"; {len(failed)} lần lỗi ({lost_txt})" if failed else "")
     return f"${sum(r[0] or 0 for r in rows) / n * 1000:.2f}", latency
 
 
