@@ -3,11 +3,13 @@
 CV chỉ nằm trong bộ nhớ của request: không ghi file, DB hay log.
 """
 import datetime
+import json
 import io
 import os
 import sqlite3
 import urllib.request
 from pathlib import Path
+from typing import Literal
 
 from starlette.concurrency import run_in_threadpool
 from starlette.formparsers import MultiPartParser
@@ -15,17 +17,39 @@ from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, Upload
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel, ValidationError
 from pypdf import PdfReader
 
 from jobmarket import query
 from jobmarket.extract import llm, local
-from jobmarket.normalize import load_aliases, normalize_all
+from jobmarket.normalize import load_aliases, normalize
 
 MAX_BYTES = 5 * 1024 * 1024
 # Starlette ghi phần upload >1 MB ra file tạm; nâng ngưỡng để CV (≤ MAX_BYTES) chỉ nằm trong bộ nhớ.
 MultiPartParser.spool_max_size = MAX_BYTES + 1024 * 1024
 MAX_CV_CHARS = 20_000  # vượt thì Ollama tự cắt ngữ cảnh 8K token mà không báo; cắt trước cho rõ ràng
-CV_PROMPT = llm.PROMPTS / "cv_v1.txt"
+CV_PROMPT = llm.PROMPTS / "cv_v2.txt"
+CV_MAX_OUTPUT = 2048  # mỗi kỹ năng kèm câu trích ≤ 12 từ: output dài hơn trích JD
+CV_SCHEMA = {
+    "type": "object",
+    "properties": {"skills": {"type": "array", "items": {
+        "type": "object",
+        "properties": {"name": {"type": "string"}, "evidence": {"type": "string", "enum": ["used", "listed"]},
+                       "quote": {"type": "string"}},
+        "required": ["name", "evidence", "quote"],
+    }}},
+    "required": ["skills"],
+}
+
+
+class _CvSkill(BaseModel):
+    name: str
+    evidence: Literal["used", "listed"]
+    quote: str
+
+
+class _Cv(BaseModel):
+    skills: list[_CvSkill]
 
 app = FastAPI(title="JobMarket VN API")
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173"], allow_methods=["GET", "POST"], allow_headers=["*"])
@@ -51,7 +75,7 @@ def _cv_model() -> str:
 
 
 def get_runner():
-    return local.ollama_runner(_cv_model())
+    return local.ollama_runner(_cv_model(), schema=CV_SCHEMA, num_predict=CV_MAX_OUTPUT)
 
 
 def ollama_up() -> bool:
@@ -99,6 +123,29 @@ def _cv_text(name: str, data: bytes) -> str:
     raise HTTPException(422, "Chỉ nhận CV định dạng .pdf hoặc .txt.")
 
 
+def _fold(text: str) -> str:
+    return " ".join(text.split()).casefold()
+
+
+def _cv_skills(out: str, text: str) -> list[dict] | None:
+    """Output runner → [{skill, evidence, quote}]; None nếu output hỏng. Câu trích không có trong CV → hạ về `listed`."""
+    try:
+        cv = _Cv.model_validate(json.loads(out)["structured_output"])
+    except (json.JSONDecodeError, KeyError, TypeError, ValidationError):
+        return None
+    table, folded, merged = load_aliases(), _fold(text), {}
+    for item in cv.skills:
+        if not item.name.strip():
+            continue
+        quote = " ".join(item.quote.split())
+        used = item.evidence == "used" and bool(quote) and _fold(quote) in folded
+        skill = normalize(item.name, table)
+        prev = merged.get(skill.casefold())
+        if prev is None or (used and prev["evidence"] == "listed"):  # cùng tên chuẩn: `used` thắng
+            merged[skill.casefold()] = {"skill": skill, "evidence": "used" if used else "listed", "quote": quote if used else ""}
+    return list(merged.values())
+
+
 @app.post("/api/match")
 async def match(file: UploadFile = File(...), top_k: int = Form(10), conn=Depends(get_conn), runner=Depends(get_runner)):
     if not 1 <= top_k <= 50:
@@ -112,12 +159,14 @@ async def match(file: UploadFile = File(...), top_k: int = Form(10), conn=Depend
     unavailable = HTTPException(503, "Không trích được kỹ năng từ CV: Ollama chưa chạy hoặc model lỗi. Hãy bật Ollama rồi thử lại.")
     try:
         # model local ~1 phút/CV: chạy ngoài event loop để các request khác không bị chặn
-        out = await run_in_threadpool(runner, CV_PROMPT.read_text(encoding="utf-8"), f"### JD cv\nCV\n{text[:MAX_CV_CHARS]}")
-        parsed = llm.parse_output(out, {"cv"})
+        text = text[:MAX_CV_CHARS]
+        out = await run_in_threadpool(runner, CV_PROMPT.read_text(encoding="utf-8"), text)
     except Exception:
         raise unavailable
-    if parsed.error or "cv" not in parsed.skills:
+    cv_skills = _cv_skills(out, text)
+    if cv_skills is None:
         raise unavailable
-    cv_skills = normalize_all(parsed.skills["cv"], load_aliases())
+    names = [s["skill"] for s in cv_skills]
+    listed = [s["skill"] for s in cv_skills if s["evidence"] == "listed"]
     return {"model": _cv_model(), "cv_skills": cv_skills,
-            "matches": query.match(conn, cv_skills, top_k, datetime.date.today().isoformat())}
+            "matches": query.match(conn, names, top_k, datetime.date.today().isoformat(), listed)}

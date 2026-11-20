@@ -37,11 +37,13 @@ def _blank_pdf():
 
 
 def _runner_returning(skills):
+    """skills: tên (→ `used`, câu trích = chính tên) hoặc dict đầy đủ {name, evidence, quote}."""
     seen = []
+    items = [s if isinstance(s, dict) else {"name": s, "evidence": "used", "quote": s} for s in skills]
 
     def run(system, user_input):
         seen.append(user_input)
-        return json.dumps({"structured_output": {"results": [{"jd_id": "cv", "skills": skills}]}})
+        return json.dumps({"structured_output": {"skills": items}})
 
     run.seen = seen
     return run
@@ -87,9 +89,11 @@ def test_jobs_filter(client):
 
 
 def test_match_txt(client):
-    r = client.post("/api/match", files={"file": ("cv.txt", "Tôi biết Python".encode(), "text/plain")}, data={"top_k": "1"})
+    r = client.post("/api/match", files={"file": ("cv.txt", "Dự án: dùng Python và SQL".encode(), "text/plain")}, data={"top_k": "1"})
     body = r.json()
-    assert r.status_code == 200 and body["model"] == "qwen3:8b" and body["cv_skills"] == ["Python", "SQL"]
+    assert r.status_code == 200 and body["model"] == "qwen3:8b"
+    assert body["cv_skills"] == [{"skill": "Python", "evidence": "used", "quote": "Python"},
+                                 {"skill": "SQL", "evidence": "used", "quote": "SQL"}]
     assert len(body["matches"]) == 1 and body["matches"][0]["title"] == "b" and body["matches"][0]["score"] == 1.0
 
 
@@ -97,7 +101,7 @@ def test_match_pdf_text_reaches_runner(client):
     run = _runner_returning(["Python"])
     api.app.dependency_overrides[api.get_runner] = lambda: run
     r = client.post("/api/match", files={"file": ("cv.pdf", PDF_WITH_TEXT, "application/pdf")})
-    assert r.status_code == 200 and "Python SQL" in run.seen[0] and run.seen[0].startswith("### JD cv\nCV\n")
+    assert r.status_code == 200 and run.seen[0] == "Python SQL"
 
 
 def test_bad_type_422(client):
@@ -134,3 +138,36 @@ def test_cv_upload_up_to_limit_stays_in_memory():
     from starlette.formparsers import MultiPartParser
     from jobmarket.api import app as api_app
     assert MultiPartParser.spool_max_size > api_app.MAX_BYTES
+
+
+def _match_cv(client, text, items):
+    api.app.dependency_overrides[api.get_runner] = lambda: _runner_returning(items)
+    return client.post("/api/match", files={"file": ("cv.txt", text.encode(), "text/plain")})
+
+
+def test_cv_quote_not_in_text_downgraded(client):
+    r = _match_cv(client, "Dự án chatbot:\n  triển khai   API bằng FastAPI.\nKỹ năng: Docker", [
+        {"name": "Docker", "evidence": "used", "quote": "deploy bằng Docker trên AWS"},  # model bịa câu trích
+        {"name": "FastAPI", "evidence": "used", "quote": "Triển khai API bằng FastAPI"},  # khác khoảng trắng, hoa thường
+    ])
+    assert r.json()["cv_skills"] == [{"skill": "Docker", "evidence": "listed", "quote": ""},
+                                     {"skill": "FastAPI", "evidence": "used", "quote": "Triển khai API bằng FastAPI"}]
+
+
+def test_cv_duplicate_after_normalize_used_wins(client):
+    r = _match_cv(client, "Dự án dùng PostgreSQL. Kỹ năng: Postgres", [
+        {"name": "Postgres", "evidence": "listed", "quote": ""},
+        {"name": "PostgreSQL", "evidence": "used", "quote": "dùng PostgreSQL"},
+    ])
+    assert r.json()["cv_skills"] == [{"skill": "PostgreSQL", "evidence": "used", "quote": "dùng PostgreSQL"}]
+
+
+def test_cv_bad_schema_503(client):
+    assert _match_cv(client, "Python", [{"name": "Python", "evidence": "maybe", "quote": ""}]).status_code == 503
+
+
+def test_listed_lowers_score(client):
+    r = _match_cv(client, "Dự án dùng SQL. Kỹ năng: Python", [
+        {"name": "Python", "evidence": "listed", "quote": ""}, "SQL"])
+    b = next(m for m in r.json()["matches"] if m["title"] == "b")
+    assert 0 < b["score"] < 1.0 and b["matched"] == ["SQL", "Python"]
