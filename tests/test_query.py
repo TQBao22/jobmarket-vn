@@ -86,3 +86,12 @@ def test_match_order_and_exclusions(conn):
 def test_jobs_without_skills_ignored(tmp_path):
     c = _db(tmp_path, [("a", "2026-11-01", "", [])])
     assert query.match(c, ["Python"], 10, TODAY) == []
+
+
+def test_match_listed_counts_half(tmp_path):
+    c = _db(tmp_path, [("a", "2026-11-01", "", ["Python", "SQL"]), ("b", "2026-11-02", "", ["Python"])])
+    assert query.match(c, ["python", "sql"], 10, TODAY, listed=["PYTHON", "Sql"])[0]["score"] == 0.5
+    w_py, w_sql = math.log(2 / 2) + 1, math.log(2 / 1) + 1
+    a = next(m for m in query.match(c, ["Python", "SQL"], 10, TODAY, listed=["sql"]) if m["title"] == "a")
+    assert a["score"] == pytest.approx((w_py + 0.5 * w_sql) / (w_py + w_sql), abs=1e-3)
+    assert a["matched"] == ["SQL", "Python"] and a["missing"] == []

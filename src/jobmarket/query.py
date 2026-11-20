@@ -5,6 +5,7 @@ Kỹ năng của JD lấy từ extractions của `llm.MODEL` + `llm.PROMPT_VERSI
 import math
 import sqlite3
 from collections import Counter
+from collections.abc import Iterable
 
 from jobmarket import db
 from jobmarket.aggregate import count_skills
@@ -63,8 +64,13 @@ def jobs(conn, skill: str | None, open_only: bool, limit: int, today: str) -> di
     return {"total": len(hits), "jobs": [{k: j[k] for k in keys} for j in hits[:limit]]}
 
 
-def match(conn, cv_skills: list[str], top_k: int, today: str) -> list[dict]:
-    cv = {s.casefold() for s in normalize_all(cv_skills, load_aliases())}
+LISTED_FACTOR = 0.5  # kỹ năng CV chỉ liệt kê, không có bằng chứng project/kinh nghiệm; chọn tay, không đo được
+
+
+def match(conn, cv_skills: list[str], top_k: int, today: str, listed: Iterable[str] = ()) -> list[dict]:
+    table = load_aliases()
+    cv = {s.casefold() for s in normalize_all(cv_skills, table)}
+    weak = {s.casefold() for s in normalize_all(listed, table)}
     open_jobs = [j for j in _jobs_with_skills(conn) if j["skills"] and _is_open(j, today)]
     df = Counter(s for j in open_jobs for s in j["skills"])
     weight = {s: math.log(len(open_jobs) / n) + 1 for s, n in df.items()}  # kỹ năng hiếm nặng hơn
@@ -74,7 +80,8 @@ def match(conn, cv_skills: list[str], top_k: int, today: str) -> list[dict]:
         matched = [s for s in by_weight if s.casefold() in cv]
         out.append({
             "url": j["url"], "title": j["title"], "company": j["company"],
-            "score": round(sum(weight[s] for s in matched) / sum(weight[s] for s in j["skills"]), 3),
+            "score": round(sum(weight[s] * (LISTED_FACTOR if s.casefold() in weak else 1) for s in matched)
+                           / sum(weight[s] for s in j["skills"]), 3),
             "matched": matched, "missing": [s for s in by_weight if s.casefold() not in cv],
         })
     out.sort(key=lambda m: (-m["score"], m["url"]))
