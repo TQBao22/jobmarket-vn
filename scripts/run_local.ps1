@@ -1,5 +1,7 @@
 # Chạy hệ thống local: Ollama (:11434) + BE FastAPI (:8000) + FE Vite (:5173). Dừng: đóng các cửa sổ vừa mở.
 $root = Resolve-Path (Join-Path $PSScriptRoot "..")
+# terminal mở trước khi cài Ollama giữ PATH cũ: đọc lại PATH từ registry để tìm thấy ollama.exe
+$env:Path = [Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [Environment]::GetEnvironmentVariable("Path", "User")
 $env:OLLAMA_MODELS = [Environment]::GetEnvironmentVariable("OLLAMA_MODELS", "User")
 try { Invoke-RestMethod http://localhost:11434/api/version -TimeoutSec 2 | Out-Null }
 catch { Start-Process ollama -ArgumentList "serve" -WindowStyle Minimized }
