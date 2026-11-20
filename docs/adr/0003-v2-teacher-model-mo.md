@@ -45,8 +45,21 @@ Quy tắc chọn (thiết kế `docs/superpowers/specs/2026-11-18-teacher-think-
 
 Ước lượng 88 JD với `think`: 85% JD × 263 s + 15% JD × 1.800 s (chờ hết giới hạn) ≈ 5,5 + 6,6 ≈ **12 giờ** > 8 giờ.
 
-**Kết luận theo quy tắc: chưa dùng `think`** (đạt điều kiện F1, trượt điều kiện thời gian). Teacher vẫn là Qwen3-8B `think=false`.
+**Kết luận theo quy tắc: chưa dùng `think`** (trượt điều kiện thời gian; điều kiện F1 chỉ đạt theo điểm, chưa đạt khi tính sai số — xem cập nhật 2026-11-20). Teacher vẫn là Qwen3-8B `think=false`.
 
 Phương án mở, cần người dùng quyết: `think=true` với giới hạn ~10 phút/JD, JD không xong thì bỏ khỏi tập train (không gán nhãn rỗng). Ước tính ~8 giờ (sát ngưỡng) và mất ~25% JD (2/17 JD thành công cũng mất hơn 10 phút). Đổi lại nhãn chính xác hơn rõ (precision 0,82 so với 0,62).
 
-Hạn chế của phép đo: 20 JD, chênh < 0,05 coi như nhiễu (+0,062 chỉ vừa qua ngưỡng); thời gian đo trên máy có lúc chạy song song việc khác và một lần máy ngủ (đã loại khỏi trung vị).
+Hạn chế của phép đo: 20 JD nên sai số lớn (cập nhật 2026-11-20); thời gian đo trên máy có lúc chạy song song việc khác và một lần máy ngủ (đã loại khỏi trung vị).
+
+## Cập nhật 2026-11-20: khoảng tin cậy
+`evaluate` thêm khoảng tin cậy 95% bootstrap (2.000 lần lấy mẫu lại JD) và so sánh ghép cặp `--vs`: mỗi lần lấy mẫu dùng chung một bộ JD cho hai cấu hình. Số liệu: các dòng ngày 2026-11-20 trong `eval/RESULTS.md`.
+
+| `think` − không `think`, cùng 20 JD dev | Hiệu | Khoảng tin cậy 95% |
+|---|---|---|
+| Precision | +0,197 | +0,102 … +0,289 |
+| Recall | −0,014 | −0,198 … +0,159 |
+| F1 | +0,061 | −0,089 … +0,186 |
+
+- `think` đoán sai ít hơn thật (khoảng của ΔP không chứa 0) nhưng không tìm ra thêm kỹ năng. ΔF1 chưa phân biệt được với nhiễu.
+- Ngưỡng "F1 tăng ≥ 0,05" ở trên chỉ so điểm, không xét sai số. Các quyết định sau (teacher, ngưỡng router, so 3 cấu hình) dùng khoảng tin cậy của hiệu số, đúng như bước (5) của mục Quyết định.
+- Kết luận không đổi: chưa dùng `think`. Nếu bật lại thì lý do là precision (nhãn train ít nhiễu hơn), không phải F1.

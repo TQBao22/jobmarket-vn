@@ -14,6 +14,7 @@ Gold chia đôi cố định (`gold.dev_test`): **dev** (mặc định) để so
 3. `evaluate` chuẩn hoá kỹ năng ở cả dự đoán lẫn nhãn, rồi tính precision, recall, F1 (micro).
 4. Thêm **một dòng** vào cuối `eval/RESULTS.md` (`--append` tự tạo file nếu chưa có):
    `| ngày | cấu hình (api/local/routing) | model | prompt | P | R | F1 | chi phí /1.000 JD | độ trễ p50 | ghi chú |`
+   F1 kèm khoảng tin cậy 95% bootstrap; độ trễ theo s/JD (từ 2026-11-20, dòng cũ ghi s/lô).
    Không sửa các dòng cũ.
 5. Liệt kê 5 JD sai nhiều nhất, mỗi JD ghi: kỹ năng bị sót, kỹ năng bị thừa.
-6. So với dòng trước đó trong `RESULTS.md`: tăng hay giảm, bao nhiêu.
+6. So với cấu hình trước: chạy thêm `--vs <model>` để có ΔP, ΔR, ΔF1 kèm khoảng tin cậy ghép cặp. Chỉ nói "tốt hơn" khi khoảng tin cậy của ΔF1 không chứa 0.

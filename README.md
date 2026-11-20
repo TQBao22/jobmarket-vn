@@ -20,7 +20,7 @@ Trích kỹ năng trên 40 tin tuyển dụng có nhãn sẵn (gold set), tính 
 Hạn chế cần biết khi đọc bảng:
 
 - 38/40 tin trong gold set do Claude Opus gán nhãn và Claude Sonnet duyệt; người duyệt 2 tin. Haiku cùng họ model nên điểm của nó có thể cao hơn thực tế.
-- 40 tin là ít. Chênh lệch dưới khoảng 0,05 F1 chưa đủ để kết luận.
+- 40 tin là ít. Từ 2026-11-20 mỗi lần đo ghi kèm khoảng tin cậy 95% của F1 (bootstrap theo tin). Trên 20 tin dev, khoảng này rộng từ ±0,06 đến ±0,13, nên hai cấu hình chỉ được coi là khác nhau khi khoảng tin cậy của hiệu số (`python -m jobmarket.evaluate --vs <model>`) không chứa 0.
 - Từ 2026-11-18, gold set chia đôi cố định: 20 tin để thử cấu hình, 20 tin chỉ chấm khi đã chốt.
 
 ## Cách hoạt động
