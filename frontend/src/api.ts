@@ -10,7 +10,8 @@ export interface Jobs { total: number; jobs: Job[] }
 export interface Match {
   url: string; title: string; company: string; score: number; matched: string[]; missing: string[];
 }
-export interface MatchResult { model: string; cv_skills: string[]; matches: Match[] }
+export interface CvSkill { skill: string; evidence: "used" | "listed"; quote: string }
+export interface MatchResult { model: string; cv_skills: CvSkill[]; matches: Match[] }
 
 async function call<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, init);

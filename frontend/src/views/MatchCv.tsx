@@ -27,6 +27,10 @@ export default function MatchCv() {
     finally { setBusy(false); }
   };
 
+  const used = res?.cv_skills.filter((s) => s.evidence === "used") ?? [];
+  const listed = res?.cv_skills.filter((s) => s.evidence === "listed").map((s) => s.skill) ?? [];
+  const weak = new Set(listed.map((s) => s.toLowerCase()));
+
   return (
     <section aria-labelledby="h-match">
       <h2 id="h-match">Khớp CV với JD đang mở</h2>
@@ -47,7 +51,16 @@ export default function MatchCv() {
       {res && (
         <>
           <h3>Kỹ năng trong CV</h3>
-          <Chips items={res.cv_skills} label="Kỹ năng trong CV" />
+          <p className="muted">Có trong project/kinh nghiệm</p>
+          <Chips items={used.map((s) => s.skill)} label="Có trong project/kinh nghiệm" />
+          {used.length > 0 && (
+            <details>
+              <summary>Câu trích làm bằng chứng</summary>
+              <ul>{used.map((s) => <li key={s.skill}><strong>{s.skill}</strong>: “{s.quote}”</li>)}</ul>
+            </details>
+          )}
+          <p className="muted">Chỉ liệt kê (tính nửa điểm khi khớp)</p>
+          <Chips items={listed} label="Chỉ liệt kê" />
           <h3>Việc làm phù hợp</h3>
           <ol className="list">
             {res.matches.map((m) => (
@@ -55,7 +68,8 @@ export default function MatchCv() {
                 <a href={m.url} target="_blank" rel="noopener">{m.title}</a>
                 {" "}<strong>{Math.round(m.score * 100)}%</strong>
                 <div className="muted">{m.company}</div>
-                <Chips items={m.matched} prefix="✓ " label="Kỹ năng đã có" />
+                <Chips items={m.matched.map((s) => weak.has(s.toLowerCase()) ? `${s} (chỉ liệt kê)` : s)}
+                  prefix="✓ " label="Kỹ năng đã có" />
                 <Chips items={m.missing} prefix="+ " label="Kỹ năng còn thiếu" />
               </li>
             ))}

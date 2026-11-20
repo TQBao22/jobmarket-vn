@@ -91,18 +91,24 @@ describe("Khớp CV", () => {
     expect(calls(fn).some((u) => u === "/api/match")).toBe(false);
   });
 
-  it("gửi multipart và hiện matched/missing", async () => {
+  it("gửi multipart, hiện bằng chứng kỹ năng và matched/missing", async () => {
     const fn = mockFetch((url) => url === "/api/match" ? json({
-      model: "m", cv_skills: ["Python", "SQL"],
+      model: "m",
+      cv_skills: [{ skill: "Python", evidence: "used", quote: "xây chatbot bằng Python" },
+        { skill: "SQL", evidence: "listed", quote: "" }],
       matches: [{ url: "https://example.test/j1", title: "Kỹ sư thử", company: "Công ty A",
-        score: 0.62, matched: ["Python"], missing: ["Docker"] }],
+        score: 0.62, matched: ["Python", "SQL"], missing: ["Docker"] }],
     }) : undefined);
     open();
     render(<App />);
     await userEvent.upload(screen.getByLabelText(/Tệp CV/), new File(["cv"], "cv.txt", { type: "text/plain" }));
     await userEvent.click(screen.getByRole("button", { name: "Khớp CV" }));
     expect(await screen.findByText("62%")).toBeInTheDocument();
+    expect(within(screen.getByRole("list", { name: "Có trong project/kinh nghiệm" })).getByText("Python")).toBeInTheDocument();
+    expect(within(screen.getByRole("list", { name: "Chỉ liệt kê" })).getByText("SQL")).toBeInTheDocument();
+    expect(screen.getByText(/xây chatbot bằng Python/)).toBeInTheDocument();
     expect(screen.getByText("✓ Python")).toBeInTheDocument();
+    expect(screen.getByText("✓ SQL (chỉ liệt kê)")).toBeInTheDocument();
     expect(screen.getByText("+ Docker")).toBeInTheDocument();
     const call = fn.mock.calls.find((c) => c[0] === "/api/match")!;
     const body = call[1]!.body as FormData;
