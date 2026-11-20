@@ -17,18 +17,31 @@ class NotFound(Exception):
 
 
 def _jobs_with_skills(conn) -> list[dict]:
+    """JD đã trích kỹ năng; `crawled` = ngày crawl đủ gần nhất của nguồn (max `last_seen`), None nếu chưa có."""
     table = load_aliases()
     by_hash = {e["content_hash"]: e["skills"] for e in db.load_extractions(conn, llm.MODEL, llm.PROMPT_VERSION)}
+    jobs = db.load_all(conn)
+    crawled: dict[str, str] = {}
+    for j in jobs:
+        if j["last_seen"]:
+            crawled[j["source"]] = max(crawled.get(j["source"], ""), j["last_seen"])
     out = []
-    for job in db.load_all(conn):
+    for job in jobs:
         raw = by_hash.get(llm.content_hash(job["description"] or ""))
         if raw is not None:
-            out.append({**job, "skills": normalize_all(raw, table)})
+            out.append({**job, "skills": normalize_all(raw, table), "crawled": crawled.get(job["source"])})
     return out
 
 
 def _is_open(job: dict, today: str) -> bool:
-    return not job["valid_through"] or job["valid_through"] >= today  # ISO YYYY-MM-DD so sánh được theo chuỗi
+    """JD đang mở, định nghĩa ở `docs/api.md`. Ngày ISO YYYY-MM-DD so sánh được theo chuỗi."""
+    until, seen, crawled = job["valid_through"], job["last_seen"], job["crawled"]
+    if seen is None or crawled is None:  # chưa có dữ liệu sitemap cho JD này: chỉ xét hạn nộp
+        return not until or until >= today
+    if seen < crawled:  # không còn trên sitemap ở lần crawl đủ gần nhất: nguồn đã gỡ tin
+        return False
+    # còn trên sitemap: hạn đã qua trước lần crawl đó nghĩa là HTML cũ, nhà tuyển dụng đã gia hạn
+    return not until or until >= today or until < crawled
 
 
 def health(conn: sqlite3.Connection) -> dict:

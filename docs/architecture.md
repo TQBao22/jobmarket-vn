@@ -56,7 +56,7 @@ Mỗi module chỉ đọc/ghi DB qua `db.py`. Logic thuần (parse, che PII, chu
 ## Lưu trữ: `data/jobs.db`
 
 **`jobs`** (đã có) — một dòng mỗi URL JD.
-`url` PK · `source` · `title` · `company` · `date_posted` · `valid_through` · `tags` (JSON, thẻ của nguồn) · `description` (đã lọc PII) · `fetched_at`
+`url` PK · `source` · `title` · `company` · `date_posted` · `valid_through` · `tags` (JSON, thẻ của nguồn) · `description` (đã lọc PII) · `fetched_at` · `last_seen` (ngày gần nhất JD còn trên sitemap ở một lần crawl đủ; dùng để biết JD còn mở)
 
 **`llm_calls`** (bước 3) — một dòng mỗi lần gọi `claude -p`.
 `call_id` PK · `model` · `prompt_version` · `n_jd` · `cost_usd` (quy đổi) · `input_tokens` · `output_tokens` · `latency_ms` · `error` (NULL nếu ổn) · `created_at`

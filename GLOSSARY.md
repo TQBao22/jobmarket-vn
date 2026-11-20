@@ -12,6 +12,10 @@ _Avoid_: job, bài đăng, posting
 Một trang tuyển dụng được crawl (ITviec, ...).
 _Avoid_: site, provider
 
+**JD đang mở**:
+JD mà nguồn vẫn đang đăng ở lần crawl đủ gần nhất và chưa hết hạn nộp sau lần đó. Hạn nộp ghi trong JD có thể đã cũ nếu nhà tuyển dụng gia hạn; việc nguồn còn đăng được ưu tiên.
+_Avoid_: JD còn hạn, JD active
+
 **HTML gốc**:
 Trang JD đúng như lúc tải về, chưa parse.
 _Avoid_: raw page, snapshot

@@ -1,4 +1,6 @@
-"""Lưu JD vào SQLite. Một dòng mỗi URL; lưu lại cùng URL thì ghi đè bằng giá trị mới."""
+"""Lưu JD vào SQLite. Một dòng mỗi URL; lưu lại cùng URL thì ghi đè các trường của JD bằng giá trị mới.
+
+`last_seen`: ngày gần nhất JD còn trên sitemap của nguồn ở một lần crawl đủ; chỉ `mark_seen` ghi cột này."""
 import json
 import sqlite3
 
@@ -10,13 +12,16 @@ def connect(path) -> sqlite3.Connection:
     conn = sqlite3.connect(path)
     conn.executescript(
         "CREATE TABLE IF NOT EXISTS jobs (url TEXT PRIMARY KEY, source TEXT, title TEXT, company TEXT,"
-        " date_posted TEXT, valid_through TEXT, tags TEXT, description TEXT, fetched_at TEXT);"
+        " date_posted TEXT, valid_through TEXT, tags TEXT, description TEXT, fetched_at TEXT, last_seen TEXT);"
         "CREATE TABLE IF NOT EXISTS llm_calls (call_id INTEGER PRIMARY KEY AUTOINCREMENT, model TEXT, prompt_version TEXT,"
         " n_jd INTEGER, cost_usd REAL, input_tokens INTEGER, output_tokens INTEGER, latency_ms INTEGER, error TEXT, created_at TEXT);"
         # khoá chính = khoá cache: cùng nội dung JD + model + prompt thì không gọi LLM lần nữa
         "CREATE TABLE IF NOT EXISTS extractions (content_hash TEXT, model TEXT, prompt_version TEXT, url TEXT, skills TEXT,"
         " call_id INTEGER REFERENCES llm_calls(call_id), PRIMARY KEY (content_hash, model, prompt_version));"
     )
+    if "last_seen" not in {r[1] for r in conn.execute("PRAGMA table_info(jobs)")}:  # DB tạo trước khi có cột
+        conn.execute("ALTER TABLE jobs ADD COLUMN last_seen TEXT")
+        conn.commit()
     return conn
 
 
@@ -45,10 +50,19 @@ def load_extractions(conn: sqlite3.Connection, model: str, prompt_version: str) 
 
 def save(conn: sqlite3.Connection, job: dict) -> None:
     row = {**job, "tags": json.dumps(job["tags"], ensure_ascii=False)}
-    conn.execute(f"INSERT OR REPLACE INTO jobs ({_COLS}) VALUES ({', '.join('?' * len(COLUMNS))})", [row[c] for c in COLUMNS])
+    update = ", ".join(f"{c} = excluded.{c}" for c in COLUMNS[1:])  # không đụng last_seen
+    conn.execute(f"INSERT INTO jobs ({_COLS}) VALUES ({', '.join('?' * len(COLUMNS))}) ON CONFLICT(url) DO UPDATE SET {update}",
+                 [row[c] for c in COLUMNS])
+    conn.commit()
+
+
+def mark_seen(conn: sqlite3.Connection, urls: list[str], day: str) -> None:
+    conn.executemany("UPDATE jobs SET last_seen = ? WHERE url = ?", [(day, u) for u in urls])
     conn.commit()
 
 
 def load_all(conn: sqlite3.Connection) -> list[dict]:
-    rows = conn.execute(f"SELECT {_COLS} FROM jobs ORDER BY url")
-    return [{**dict(zip(COLUMNS, r)), "tags": json.loads(r[COLUMNS.index("tags")])} for r in rows]
+    """Mọi JD; `last_seen` = None nếu chưa có hoặc DB cũ chưa có cột (API/MCP mở chỉ đọc, không chạy migration)."""
+    cur = conn.execute("SELECT * FROM jobs ORDER BY url")
+    cols = [d[0] for d in cur.description]
+    return [{"last_seen": None, **dict(zip(cols, r)), "tags": json.loads(r[cols.index("tags")])} for r in cur]

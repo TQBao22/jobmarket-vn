@@ -133,14 +133,18 @@ def crawl(
     raw_dir: Path,
     db_path: Path,
     keep: Callable[[dict], bool] = lambda job: True,
+    today: str | None = None,
 ) -> Counter:
-    """Kiểm robots → lấy danh sách URL → tải (bỏ qua nếu đã có HTML gốc) → parse → lọc PII → lưu DB."""
+    """Kiểm robots → lấy danh sách URL → tải (bỏ qua nếu đã có HTML gốc) → parse → lọc PII → lưu DB.
+
+    Crawl đủ (`limit` không cắt danh sách) thì ghi `last_seen` = hôm nay cho mọi JD đã lưu: đó là các JD nguồn còn đăng.
+    Crawl bị cắt không ghi, vì không biết JD nào đã rời sitemap."""
     raw_dir.mkdir(parents=True, exist_ok=True)
     robots = urllib.robotparser.RobotFileParser()
     robots.parse(fetch(robots_url).decode("utf-8").splitlines())
     time.sleep(DELAY_SECONDS)
     urls = list_urls()
-    conn, stats = db.connect(db_path), Counter(candidates=len(urls))
+    conn, stats, seen = db.connect(db_path), Counter(candidates=len(urls)), []
     for url in urls[:limit]:
         if not robots.can_fetch(UA, url):
             stats["robots_disallowed"] += 1
@@ -170,5 +174,9 @@ def crawl(
             job["description"] = redact(job["description"])
         fetched_at = json.loads(meta_path.read_text(encoding="utf-8"))["fetched_at"]
         db.save(conn, {"url": url, "source": source, **job, "fetched_at": fetched_at})
+        seen.append(url)
         stats["saved"] += 1
+    if limit >= len(urls):
+        db.mark_seen(conn, seen, today or datetime.date.today().isoformat())
+        stats["marked_seen"] = len(seen)
     return stats

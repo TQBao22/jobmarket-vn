@@ -86,3 +86,20 @@ def test_match_order_and_exclusions(conn):
 def test_jobs_without_skills_ignored(tmp_path):
     c = _db(tmp_path, [("a", "2026-11-01", "", [])])
     assert query.match(c, ["Python"], 10, TODAY) == []
+
+
+def test_open_follows_latest_full_crawl(tmp_path):
+    c = _db(tmp_path, [
+        ("listed", "2026-11-01", "2026-12-01", ["Python"]),    # còn trên sitemap, còn hạn → mở
+        ("gone", "2026-11-01", "2026-12-01", ["Python"]),      # rời sitemap dù hạn chưa tới → đóng
+        ("extended", "2026-10-01", "2026-11-10", ["Python"]),  # hạn đã qua trước lần crawl mà vẫn trên sitemap: đã gia hạn → mở
+        ("expired", "2026-11-01", "2026-11-16", ["Python"]),   # hạn qua sau lần crawl → đóng
+        ("unseen", "2026-11-16", "2026-12-01", ["Python"]),    # chưa có ngày thấy (vd. lưu từ crawl --limit): xét hạn → mở
+        ("unseen_old", "2026-10-01", "2026-11-01", ["Python"]),  # chưa có ngày thấy, hết hạn → đóng
+    ])
+    db.mark_seen(c, ["https://x.test/gone"], "2026-11-08")
+    db.mark_seen(c, [f"https://x.test/{s}" for s in ("listed", "extended", "expired")], "2026-11-15")
+    want = {"listed", "extended", "unseen"}
+    assert {j["title"] for j in query.jobs(c, None, True, 50, TODAY)["jobs"]} == want
+    assert {m["title"] for m in query.match(c, ["Python"], 10, TODAY)} == want
+    assert query.jobs(c, None, False, 50, TODAY)["total"] == 6

@@ -4,7 +4,9 @@ BE: FastAPI tại `http://localhost:8000`, mọi route có tiền tố `/api`. F
 
 Mọi dữ liệu kỹ năng đều đã chuẩn hoá bằng `normalize/aliases.csv`. Kỹ năng của JD lấy từ bảng `extractions` với model `claude-haiku-5-5`, prompt `v1` (chất lượng tốt nhất hiện có, `eval/RESULTS.md`).
 
-"JD đang mở": `valid_through` rỗng hoặc ≥ ngày hôm nay.
+"JD đang mở" (`query._is_open`):
+- JD có `last_seen` (crawl đủ gần nhất của nguồn thấy JD trên sitemap): mở nếu `last_seen` bằng ngày crawl đủ gần nhất của nguồn, và `valid_through` rỗng, ≥ hôm nay, hoặc đã qua từ trước lần crawl đó (HTML cũ, nhà tuyển dụng đã gia hạn). JD không còn trên sitemap thì đóng dù hạn chưa tới.
+- JD chưa có `last_seen` (trước lần crawl đủ đầu tiên, hoặc lưu từ lần crawl bị `--limit` cắt): mở nếu `valid_through` rỗng hoặc ≥ hôm nay.
 
 ## `GET /api/health`
 ```json

@@ -3,8 +3,11 @@ from pathlib import Path
 import pytest
 
 import io
+import json
 import urllib.error
 
+from jobmarket import db
+from jobmarket.crawl import jobposting
 from jobmarket.crawl.jobposting import Blocked, fetch, job_urls, parse
 
 FIXTURES = Path(__file__).parent / "fixtures" / "itviec"
@@ -113,3 +116,32 @@ def test_parse_strips_whitespace_around_title_and_company():
 def test_parse_tags_keep_commas_inside_parentheses():
     page = '<script type="application/ld+json">{"@type": "JobPosting", "skills": "SQL, Trực quan hóa (Tableau, Power BI), DA"}</script>'
     assert parse(page)["tags"] == ["SQL", "Trực quan hóa (Tableau, Power BI)", "DA"]
+
+
+def _crawl(tmp_path, monkeypatch, urls, limit):
+    """Crawl offline: HTML gốc có sẵn trong raw_dir nên không tải trang; robots.txt cho phép mọi URL."""
+    raw = tmp_path / "raw"
+    raw.mkdir(exist_ok=True)
+    for u in urls:
+        name = u.rsplit("/", 1)[1]
+        page = f'<script type="application/ld+json">{{"@type": "JobPosting", "title": "{name}", "description": "Python"}}</script>'
+        (raw / f"{name}.html").write_text(page, encoding="utf-8")
+        (raw / f"{name}.meta.json").write_text(json.dumps({"url": u, "fetched_at": "2026-11-16T20:00:00+07:00"}), encoding="utf-8")
+    monkeypatch.setattr(jobposting, "fetch", lambda url: b"User-agent: *\nAllow: /\n")
+    monkeypatch.setattr(jobposting.time, "sleep", lambda s: None)
+    stats = jobposting.crawl("itviec", "https://x.test/robots.txt", lambda: urls, lambda u: u.rsplit("/", 1)[1],
+                             limit, raw, tmp_path / "t.db", today="2026-11-22")
+    return stats, db.load_all(db.connect(tmp_path / "t.db"))
+
+
+def test_full_crawl_marks_listed_jobs_seen(tmp_path, monkeypatch):
+    stats, rows = _crawl(tmp_path, monkeypatch, [f"https://x.test/job-{i}" for i in range(3)], limit=10)
+    assert stats["saved"] == stats["marked_seen"] == 3
+    assert {r["last_seen"] for r in rows} == {"2026-11-22"}
+
+
+def test_partial_crawl_does_not_mark_seen(tmp_path, monkeypatch):
+    # --limit cắt bớt sitemap: không biết JD nào đã rời sitemap, nên không ghi ngày thấy cho JD nào
+    stats, rows = _crawl(tmp_path, monkeypatch, [f"https://x.test/job-{i}" for i in range(3)], limit=2)
+    assert stats["saved"] == 2 and "marked_seen" not in stats
+    assert {r["last_seen"] for r in rows} == {None}
